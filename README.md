@@ -10,57 +10,59 @@ With this SQL
 Return this object:
 
 ```json
-{
-    select: [{
-        value: '*',
-        alias: null,
-        type: 'wildcard'
-    }],
-    from: 'tablename',
-    where: {
-        type: 'conditional',
-        value: 'or',
-        left: {
-            type: 'conditional',
-            value: 'and',
-            left: {
-                type: 'operator',
-                value: '>',
-                left: {
-                    value: 'a',
-                    type: 'literal'
-                },
-                right: {
-                    value: 2,
-                    type: 'number'
-                }
+{  
+   "select":[  
+      {  
+         "value":"*",
+         "alias":null,
+         "type":"wildcard"
+      }
+   ],
+   "from":"tablename",
+   "where":{  
+      "type":"conditional",
+      "value":"or",
+      "left":{  
+         "type":"conditional",
+         "value":"and",
+         "left":{  
+            "type":"operator",
+            "value":">",
+            "left":{  
+               "value":"a",
+               "type":"literal"
             },
-            right: {
-                type: 'operator',
-                value: '<',
-                left: {
-                    value: 'b',
-                    type: 'literal'
-                },
-                right: {
-                    value: 3,
-                    type: 'number'
-                }
+            "right":{  
+               "value":2,
+               "type":"number"
             }
-        },
-        right: {
-            type: 'operator',
-            value: '=',
-            left: {
-                value: 'c',
-                type: 'literal'
+         },
+         "right":{  
+            "type":"operator",
+            "value":"<",
+            "left":{  
+               "value":"b",
+               "type":"literal"
             },
-            right: {
-                value: 2,
-                type: 'number'
+            "right":{  
+               "value":3,
+               "type":"number"
             }
-        }
-    }
+         }
+      },
+      "right":{  
+         "type":"operator",
+         "value":"=",
+         "left":{  
+            "value":"c",
+            "type":"literal"
+         },
+         "right":{  
+            "value":2,
+            "type":"number"
+         }
+      }
+   }
 }
 ```
 
