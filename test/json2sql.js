@@ -218,6 +218,38 @@ describe('json2sql', () => {
         });
     });
 
+    describe('GroupBy', () => {
+        it('Group by one field', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name']
+            };
+
+            const response = 'SELECT * FROM tablename GROUP BY name';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('Group by several fields', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname']
+            };
+
+            const response = 'SELECT * FROM tablename GROUP BY name, surname';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+    });
+
     describe('Where', () => {
         it('With one comparison', () => {
             const data = {
