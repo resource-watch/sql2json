@@ -248,6 +248,32 @@ describe('json2sql', () => {
             const response = 'SELECT * FROM tablename GROUP BY name, surname';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
+
+        it('Group with where', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                }
+            };
+
+            const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY name, surname';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
     });
 
     describe('Where', () => {
@@ -596,6 +622,38 @@ describe('json2sql', () => {
             };
 
             const response = 'SELECT * FROM tablename LIMIT 5 OFFSET 10';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+    });
+    describe('all', () => {
+        it('All', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                },
+                limit: 1,
+                orderBy: [{
+                    value: 'name',
+                    direction: null
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY name, surname ORDER BY name LIMIT 1';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
     });

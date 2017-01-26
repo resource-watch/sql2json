@@ -510,6 +510,33 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
+
+        it('Group with where', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                }
+            };
+
+            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
     });
 
     describe('OrderBy', () => {
@@ -626,6 +653,40 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename limit 5 offset 10');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
+
+    describe('all', () => {
+        it('All', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                },
+                limit: 1,
+                orderBy: [{
+                    value: 'name',
+                    direction: null
+                }]
+            };
+
+            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
