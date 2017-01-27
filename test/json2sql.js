@@ -18,6 +18,66 @@ describe('json2sql', () => {
 
     });
 
+    describe('From', () => {
+
+        it('With table name', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT * FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With table name inside quotes', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '"tablename"'
+            };
+
+            const response = 'SELECT * FROM "tablename"';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With table name inside quotes 2', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '"ft:table/name"'
+            };
+
+            const response = 'SELECT * FROM "ft:table/name"';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With table name inside simple quotes', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '\'ft:tablename\''
+            };
+
+            const response = 'SELECT * FROM \'ft:tablename\'';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+    });
+
     describe('Select', () => {
         it('SQL with wildcard', () => {
             const data = {
@@ -135,6 +195,21 @@ describe('json2sql', () => {
             };
 
             const response = 'SELECT sum(column1) AS total FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('SQL with gee function', () => {
+            const data = {
+                select: [{
+                    alias: 'total',
+                    type: 'function',
+                    value: 'ST_HISTOGRAM',
+                    arguments: []
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT ST_HISTOGRAM() AS total FROM tablename';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
     });

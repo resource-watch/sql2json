@@ -18,6 +18,70 @@ describe('sql2json', () => {
 
     });
 
+    describe('From', () => {
+
+        it('With table name', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select * from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With table name inside quotes', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '"tablename"'
+            };
+
+            const obj = new Sql2json('select * from "tablename"');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With table name inside quotes 2', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '"ft:table/name"'
+            };
+
+            const obj = new Sql2json('select * from "ft:table/name"');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With table name inside simple quotes', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '\'ft:tablename\''
+            };
+
+            const obj = new Sql2json('select * from \'ft:tablename\'');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+    });
+
     describe('Select', () => {
 
         it('SQL with wildcard', () => {
@@ -142,6 +206,22 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select sum(column1) as total from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with gee function', () => {
+            const response = {
+                select: [{
+                    alias: 'total',
+                    type: 'function',
+                    value: 'ST_HISTOGRAM',
+                    arguments: []
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select ST_HISTOGRAM() as total from tablename');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
