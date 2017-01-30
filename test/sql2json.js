@@ -80,6 +80,21 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('With table name inside dots', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'public.pepe'
+            };
+
+            const obj = new Sql2json('select * from public.pepe');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
     });
 
     describe('Select', () => {
@@ -606,6 +621,33 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename where country_iso = \'BRA\'');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With like', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'country_iso',
+                        type: 'literal'
+                    },
+                    value: 'LIKE',
+                    right: {
+                        value: 'BRA',
+                        type: 'string'
+                    }
+                }
+            };
+
+            const obj = new Sql2json('select * from tablename where country_iso LIKE \'BRA\'');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });

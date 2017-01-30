@@ -76,6 +76,20 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('With table name inside dots', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'public.pepe'
+            };
+
+            const response = 'SELECT * FROM public.pepe';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
     });
 
     describe('Select', () => {
