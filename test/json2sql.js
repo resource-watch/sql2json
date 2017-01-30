@@ -666,6 +666,58 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('With equality', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'country_iso',
+                        type: 'literal'
+                    },
+                    value: '=',
+                    right: {
+                        value: 'BRA',
+                        type: 'string'
+                    }
+                }
+            };
+
+            const response = 'SELECT * FROM tablename WHERE country_iso = \'BRA\'';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With equality with single quotes', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'country_iso',
+                        type: 'literal'
+                    },
+                    value: '=',
+                    right: {
+                        value: 'BRA',
+                        type: 'string'
+                    }
+                }
+            };
+
+            const response = 'SELECT * FROM tablename WHERE country_iso = \'BRA\'';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
     });
 
     describe('Limit and offset', () => {
