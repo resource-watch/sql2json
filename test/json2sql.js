@@ -757,6 +757,32 @@ describe('json2sql', () => {
             const response = 'SELECT * FROM tablename WHERE day::int > 2';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
+        
+        it('With cast', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'day::int',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: 2,
+                        type: 'number'
+                    }
+                }
+            };
+
+            const response = 'SELECT * FROM tablename WHERE day::int > 2';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
 
     });
 
