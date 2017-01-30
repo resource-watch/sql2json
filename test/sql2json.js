@@ -652,6 +652,33 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('With cast', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'day::int',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: 2,
+                        type: 'number'
+                    }
+                }
+            };
+
+            const obj = new Sql2json('select * from tablename where day::int > 2');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
     });
 
     // describe('GroupBy', () => {
