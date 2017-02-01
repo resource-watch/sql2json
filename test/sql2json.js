@@ -679,7 +679,7 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
-        it('With table', () => {
+        it('With name function as select', () => {
             const response = {
                 select: [{
                     value: 'avg',
@@ -693,221 +693,262 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
+        
+        it('With between and in', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'table',
+                where: {
+                    type: 'conditional',
+                    value: 'AND',
+                    left: {
+                        type: 'in',
+                        value: 'confidence',
+                        arguments: [{
+                            type: 'string',
+                            value: 'nominal'
+                        }, {
+                            type: 'string',
+                            value: '0'
+                        }]
+                    },
+                    right: {
+                        type: 'between',
+                        value: 'bright_ti5',
+                        arguments: [{
+                            type: 'number',
+                            value: 1
+                        }, {
+                            type: 'number',
+                            value: 4
+                        }]
+                    }
+                }
+            };
+
+            const obj = new Sql2json('select * from table where confidence in (\'nominal\',\'0\') AND bright_ti5 between 1 and 4');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
     });
 
-    // describe('GroupBy', () => {
-    //     it('Group by one field', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             group: ['name']
-    //         };
+    describe('GroupBy', () => {
+        it('Group by one field', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name']
+            };
 
-    //         const obj = new Sql2json('select * from tablename group by name');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename group by name');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('Group by several fields', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             group: ['name', 'surname']
-    //         };
+        it('Group by several fields', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname']
+            };
 
-    //         const obj = new Sql2json('select * from tablename group by name, surname');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename group by name, surname');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('Group with where', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             group: ['name', 'surname'],
-    //             where: {
-    //                 type: 'between',
-    //                 value: 'data',
-    //                 arguments: [{
-    //                     value: 1,
-    //                     type: 'number'
-    //                 }, {
-    //                     value: 3,
-    //                     type: 'number'
-    //                 }]
-    //             }
-    //         };
+        it('Group with where', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                }
+            };
 
-    //         const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
-    // });
+            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
 
-    // describe('OrderBy', () => {
-    //     it('SQL with orderby', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: null
-    //             }]
-    //         };
+    describe('OrderBy', () => {
+        it('SQL with orderby', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'name',
+                    direction: null
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename order by name');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename order by name');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('SQL with orderby and direction', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: 'asc'
-    //             }]
-    //         };
+        it('SQL with orderby and direction', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'name',
+                    direction: 'asc'
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename order by name asc');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename order by name asc');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('SQL with several orderby and direction', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: 'asc'
-    //             }, {
-    //                 value: 'createdAt',
-    //                 direction: 'desc'
-    //             }]
-    //         };
+        it('SQL with several orderby and direction', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'name',
+                    direction: 'asc'
+                }, {
+                    value: 'createdAt',
+                    direction: 'desc'
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename order by name asc, createdAt desc');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename order by name asc, createdAt desc');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('SQL with several orderby and direction 2', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: 'asc'
-    //             }, {
-    //                 value: 'createdAt',
-    //                 direction: null
-    //             }]
-    //         };
+        it('SQL with several orderby and direction 2', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'name',
+                    direction: 'asc'
+                }, {
+                    value: 'createdAt',
+                    direction: null
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename order by name asc, createdAt');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
-    // });
+            const obj = new Sql2json('select * from tablename order by name asc, createdAt');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
 
-    // describe('Limit and offset', () => {
-    //     it('Limit', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             limit: 5
-    //         };
+    describe('Limit and offset', () => {
+        it('Limit', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                limit: 5
+            };
 
-    //         const obj = new Sql2json('select * from tablename limit 5');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
+            const obj = new Sql2json('select * from tablename limit 5');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-    //     it('Offset', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             limit: 5,
-    //             offset: 10
-    //         };
+        it('Offset', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                limit: 5,
+                offset: 10
+            };
 
-    //         const obj = new Sql2json('select * from tablename limit 5 offset 10');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
-    // });
+            const obj = new Sql2json('select * from tablename limit 5 offset 10');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
 
-    // describe('all', () => {
-    //     it('All', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             group: ['name', 'surname'],
-    //             where: {
-    //                 type: 'between',
-    //                 value: 'data',
-    //                 arguments: [{
-    //                     value: 1,
-    //                     type: 'number'
-    //                 }, {
-    //                     value: 3,
-    //                     type: 'number'
-    //                 }]
-    //             },
-    //             limit: 1,
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: null
-    //             }]
-    //         };
+    describe('all', () => {
+        it('All', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: ['name', 'surname'],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                },
+                limit: 1,
+                orderBy: [{
+                    value: 'name',
+                    direction: null
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
-    // });
+            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
 
 });
