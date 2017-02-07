@@ -693,7 +693,7 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
-        
+
         it('With between and in', () => {
             const response = {
                 select: [{
@@ -746,7 +746,10 @@ describe('sql2json', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name']
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }]
             };
 
             const obj = new Sql2json('select * from tablename group by name');
@@ -762,7 +765,13 @@ describe('sql2json', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname']
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }]
             };
 
             const obj = new Sql2json('select * from tablename group by name, surname');
@@ -778,7 +787,13 @@ describe('sql2json', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname'],
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }],
                 where: {
                     type: 'between',
                     value: 'data',
@@ -793,6 +808,34 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('Group with function', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'ST_GeoHash',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'the_geom_point'
+                    }, {
+                        type: 'number',
+                        value: 8
+                    }]
+                }],
+
+            };
+
+            const obj = new Sql2json('select * from tablename group by ST_GeoHash(the_geom_point, 8)');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -926,7 +969,13 @@ describe('sql2json', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname'],
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }],
                 where: {
                     type: 'between',
                     value: 'data',

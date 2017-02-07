@@ -316,7 +316,10 @@ describe('json2sql', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name']
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }]
             };
 
             const response = 'SELECT * FROM tablename GROUP BY name';
@@ -331,7 +334,13 @@ describe('json2sql', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname']
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }]
             };
 
             const response = 'SELECT * FROM tablename GROUP BY name, surname';
@@ -346,7 +355,13 @@ describe('json2sql', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname'],
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }],
                 where: {
                     type: 'between',
                     value: 'data',
@@ -361,6 +376,33 @@ describe('json2sql', () => {
             };
 
             const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY name, surname';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('Group with function', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'ST_GeoHash',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'the_geom_point'
+                    }, {
+                        type: 'number',
+                        value: 8
+                    }]
+                }],
+
+            };
+
+            const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash(the_geom_point,8)';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
     });
@@ -827,7 +869,13 @@ describe('json2sql', () => {
                     type: 'wildcard'
                 }],
                 from: 'tablename',
-                group: ['name', 'surname'],
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }],
                 where: {
                     type: 'between',
                     value: 'data',
