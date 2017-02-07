@@ -18,6 +18,40 @@ describe('json2sql', () => {
 
     });
 
+    describe('Delete', () => {
+        it('basic delete', () => {
+            const data = {
+                delete: true,
+                from: 'tablename'
+            };
+
+            const response = 'DELETE FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('with where', () => {
+            const data = {
+                delete: true,
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'id',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: 2,
+                        type: 'number'
+                    }
+                }
+            };
+
+            const response = 'DELETE FROM tablename WHERE id > 2';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+    });
+
     describe('From', () => {
 
         it('With table name', () => {
@@ -799,7 +833,7 @@ describe('json2sql', () => {
             const response = 'SELECT * FROM tablename WHERE day::int > 2';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
-        
+
         it('With cast', () => {
             const data = {
                 select: [{
