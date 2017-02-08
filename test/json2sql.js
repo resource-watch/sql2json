@@ -188,6 +188,20 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with one column and alias and alias with name of function', () => {
+            const data = {
+                select: [{
+                    value: 'column1',
+                    alias: 'count',
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT column1 AS count FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with several columns and one alias', () => {
             const data = {
                 select: [{
