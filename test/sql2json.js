@@ -292,6 +292,46 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('SQL with distinct', () => {
+            const response = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select distinct countries from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with distinct with several files', () => {
+            const response = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
+                    }, {
+                        value: 'cities',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select distinct countries, cities from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
     });
 
     describe('Where', () => {

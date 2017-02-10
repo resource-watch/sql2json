@@ -274,6 +274,44 @@ describe('json2sql', () => {
             const response = 'SELECT ST_HISTOGRAM() AS total FROM tablename';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
+
+        it('SQL with distinct', () => {
+            const data = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT DISTINCT countries FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('SQL with distinct with several files', () => {
+            const data = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
+                    }, {
+                        value: 'cities',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT DISTINCT countries, cities FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
     });
     describe('OrderBy', () => {
         it('SQL with orderby', () => {
