@@ -332,6 +332,68 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('SQL with FIRST function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'first',
+                    arguments: [{
+                        value: 'column1',
+                        type: 'literal'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select first(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with LAST function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'last',
+                    arguments: [{
+                        value: 'column1',
+                        type: 'literal'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select last(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with ST_BANDMETADATA function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'ST_BANDMETADATA',
+                    arguments: [{
+                        value: 'rast',
+                        type: 'literal'
+                    },
+                    {
+                        value: 1,
+                        type: 'number'
+                    }
+                    ]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select ST_BANDMETADATA(rast, 1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
     });
 
     describe('Where', () => {
