@@ -377,19 +377,37 @@ describe('sql2json', () => {
                     type: 'function',
                     value: 'ST_BANDMETADATA',
                     arguments: [{
-                            value: 'rast',
-                            type: 'literal'
-                        },
-                        {
-                            value: 1,
-                            type: 'number'
-                        }
-                    ]
+                        value: 'rast',
+                        type: 'literal'
+                    },
+                    {
+                        value: 1,
+                        type: 'number'
+                    }]
                 }],
                 from: 'tablename'
             };
 
             const obj = new Sql2json('select ST_BANDMETADATA(rast, 1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with sum and count inside function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'sum',
+                    arguments: [{
+                        value: 'count',
+                        type: 'literal'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select sum(count) from tablename');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -1140,7 +1158,7 @@ describe('sql2json', () => {
                         }
                     },
                     right: {
-                        type:'bracket',
+                        type: 'bracket',
                         value: {
                             type: 'conditional',
                             value: 'or',
@@ -1195,7 +1213,7 @@ describe('sql2json', () => {
                         value: {
                             type: 'conditional',
                             value: 'or',
-                            left:{
+                            left: {
                                 type: 'operator',
                                 left: {
                                     value: 'a',
@@ -1222,7 +1240,7 @@ describe('sql2json', () => {
                         }
                     },
                     right: {
-                        type:'bracket',
+                        type: 'bracket',
                         value: {
                             type: 'conditional',
                             value: 'or',
@@ -1261,44 +1279,44 @@ describe('sql2json', () => {
         });
     });
 
-    // describe('all', () => {
-    //     it('All', () => {
-    //         const response = {
-    //             select: [{
-    //                 value: '*',
-    //                 alias: null,
-    //                 type: 'wildcard'
-    //             }],
-    //             from: 'tablename',
-    //             group: [{
-    //                 type: 'literal',
-    //                 value: 'name'
-    //             }, {
-    //                 type: 'literal',
-    //                 value: 'surname'
-    //             }],
-    //             where: {
-    //                 type: 'between',
-    //                 value: 'data',
-    //                 arguments: [{
-    //                     value: 1,
-    //                     type: 'number'
-    //                 }, {
-    //                     value: 3,
-    //                     type: 'number'
-    //                 }]
-    //             },
-    //             limit: 1,
-    //             orderBy: [{
-    //                 value: 'name',
-    //                 direction: null
-    //             }]
-    //         };
+    describe('all', () => {
+        it('All', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'literal',
+                    value: 'name'
+                }, {
+                    type: 'literal',
+                    value: 'surname'
+                }],
+                where: {
+                    type: 'between',
+                    value: 'data',
+                    arguments: [{
+                        value: 1,
+                        type: 'number'
+                    }, {
+                        value: 3,
+                        type: 'number'
+                    }]
+                },
+                limit: 1,
+                orderBy: [{
+                    value: 'name',
+                    direction: null
+                }]
+            };
 
-    //         const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
-    //         const json = obj.toJSON();
-    //         json.should.deepEqual(response);
-    //     });
-    // });
+            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+    });
 
 });
