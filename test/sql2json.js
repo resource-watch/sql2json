@@ -1287,7 +1287,7 @@ describe('sql2json', () => {
                     alias: null,
                     type: 'wildcard'
                 }],
-                from: 'tablename',
+                from: '0f9e6ed2-24b4-4671-82e8-4e339420a694',
                 group: [{
                     type: 'literal',
                     value: 'name'
@@ -1313,10 +1313,12 @@ describe('sql2json', () => {
                 }]
             };
 
-            const obj = new Sql2json('select * from tablename where data between 1 and 3 group by name, surname order by name limit 1');
+            const obj = new Sql2json('select * from 0f9e6ed2-24b4-4671-82e8-4e339420a694 where data between 1 and 3 group by name, surname order by name limit 1');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
+
+        
     });
 
 });
