@@ -377,13 +377,14 @@ describe('sql2json', () => {
                     type: 'function',
                     value: 'ST_BANDMETADATA',
                     arguments: [{
-                        value: 'rast',
-                        type: 'literal'
-                    },
-                    {
-                        value: 1,
-                        type: 'number'
-                    }]
+                            value: 'rast',
+                            type: 'literal'
+                        },
+                        {
+                            value: 1,
+                            type: 'number'
+                        }
+                    ]
                 }],
                 from: 'tablename'
             };
@@ -1283,9 +1284,41 @@ describe('sql2json', () => {
         it('All', () => {
             const response = {
                 select: [{
-                    value: '*',
+                    type: 'function',
                     alias: null,
-                    type: 'wildcard'
+                    value: 'ST_Value',
+                    arguments: [{
+                        type: 'function',
+                        alias: null,
+                        value: 'st_transform',
+                        arguments: [{
+                            value: 'the_raster_webmercator',
+                            type: 'literal'
+                        },
+                        {
+                            value: 4326,
+                            type: 'number'
+                        }]
+                    }, {
+                        type: 'function',
+                        alias: null,
+                        value: 'st_setsrid',
+                        arguments: [{
+                            type: 'function',
+                            alias: null,
+                            value: 'st_geomfromgeojson',
+                            arguments: [{
+                                value: '{"type":"Point","coordinates":[-60.25001,-9.33794]}',
+                                type: 'string'
+                            }]
+                        }, {
+                            value: 4326,
+                            type: 'number'
+                        }]
+                    }, {
+                        value: 'true',
+                        type: 'literal'
+                    }]
                 }],
                 from: '0f9e6ed2-24b4-4671-82e8-4e339420a694',
                 group: [{
@@ -1313,12 +1346,12 @@ describe('sql2json', () => {
                 }]
             };
 
-            const obj = new Sql2json('select * from 0f9e6ed2-24b4-4671-82e8-4e339420a694 where data between 1 and 3 group by name, surname order by name limit 1');
+            const obj = new Sql2json('select ST_Value(st_transform(the_raster_webmercator,4326), st_setsrid(st_geomfromgeojson(\'{"type":"Point","coordinates":[-60.25001,-9.33794]}\'),4326), true)  from 0f9e6ed2-24b4-4671-82e8-4e339420a694 where data between 1 and 3 group by name, surname order by name limit 1');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
 
-        
+
     });
 
 });
