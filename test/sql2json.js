@@ -150,6 +150,21 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('SQL with static columns', () => {
+            const response = {
+                select: [{
+                    value: '1',
+                    alias: 'group',
+                    type: 'string'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select \'1\' as group from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
         it('SQL with one column', () => {
             const response = {
                 select: [{
