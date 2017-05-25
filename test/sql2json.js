@@ -22,10 +22,10 @@ describe('sql2json', () => {
         it('basic delete', () => {
             const response = {
                 delete: true,
-                from: 'tablename'
+                from: '75832571-44e7-41a3-96cf-4368a7f07075'
             };
 
-            const obj = new Sql2json('DELETE FROM tablename');
+            const obj = new Sql2json('DELETE FROM 75832571-44e7-41a3-96cf-4368a7f07075');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
