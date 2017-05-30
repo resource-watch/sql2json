@@ -795,7 +795,7 @@ describe('sql2json', () => {
                 }
             };
 
-            const obj = new Sql2json('select * from tablename where country_iso = "BRA"');
+            const obj = new Sql2json('select * from tablename where country_iso="BRA"');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
