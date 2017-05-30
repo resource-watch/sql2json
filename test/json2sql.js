@@ -124,6 +124,19 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('With table name like bigquery', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: '[bigquery-public-data:noaa_gsod.stations]'
+            };
+
+            const response = 'SELECT * FROM [bigquery-public-data:noaa_gsod.stations]';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
     });
 
     describe('Select', () => {
