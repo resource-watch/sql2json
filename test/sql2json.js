@@ -443,6 +443,25 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('SQL with false as column name', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'literal',
+                    value: 'false'
+                }, {
+                    alias: null,
+                    type: 'literal',
+                    value: 'name'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select false, name from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
     });
 
     describe('Where', () => {
@@ -1038,6 +1057,34 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename group by ST_GeoHash(the_geom_point, 8)');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('Where with false name column', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'false',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: 2,
+                        type: 'number'
+                    }
+                }
+
+            };
+
+            const obj = new Sql2json('select * from tablename where false > 2');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });

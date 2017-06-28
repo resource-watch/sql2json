@@ -339,6 +339,26 @@ describe('json2sql', () => {
             const response = 'SELECT DISTINCT countries, cities FROM tablename';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
+
+        it('SQL with false as column name', () => {
+            const data = {
+                select: [{
+                    alias: null,
+                    type: 'literal',
+                    value: 'false'
+                }, {
+                    alias: null,
+                    type: 'literal',
+                    value: 'name'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT false, name FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        
     });
     describe('OrderBy', () => {
         it('SQL with orderby', () => {
@@ -936,6 +956,33 @@ describe('json2sql', () => {
             };
 
             const response = 'SELECT * FROM tablename WHERE day::int > 2';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('Where with false name column', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'false',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: 2,
+                        type: 'number'
+                    }
+                }
+
+            };
+
+            const response = 'SELECT * FROM tablename WHERE false > 2';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
