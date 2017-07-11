@@ -438,6 +438,63 @@ describe('json2sql', () => {
             const response = 'SELECT * FROM tablename ORDER BY name asc, createdAt';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
+
+        it('SQL with order by and function', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    type: 'function',
+                    direction: null,
+                    value: 'avg',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'name'
+                    }]
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename ORDER BY avg(name)';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('SQL with order by and serveral functions', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    type: 'function',
+                    direction: 'asc',
+                    value: 'avg',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'name'
+                    }]
+                }, {
+                    type: 'function',
+                    direction: null,
+                    value: 'sum',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'num'
+                    }]
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename ORDER BY avg(name) asc, sum(num)';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
     });
 
     describe('GroupBy', () => {

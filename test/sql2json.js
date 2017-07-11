@@ -1101,6 +1101,8 @@ describe('sql2json', () => {
                 from: 'tablename',
                 orderBy: [{
                     value: 'name',
+                    alias: null,
+                    type: 'literal',
                     direction: null
                 }]
             };
@@ -1120,6 +1122,8 @@ describe('sql2json', () => {
                 from: 'tablename',
                 orderBy: [{
                     value: 'name',
+                    alias: null,
+                    type: 'literal',
                     direction: 'asc'
                 }]
             };
@@ -1139,9 +1143,13 @@ describe('sql2json', () => {
                 from: 'tablename',
                 orderBy: [{
                     value: 'name',
+                    alias: null,
+                    type: 'literal',
                     direction: 'asc'
                 }, {
                     value: 'createdAt',
+                    alias: null,
+                    type: 'literal',
                     direction: 'desc'
                 }]
             };
@@ -1161,14 +1169,77 @@ describe('sql2json', () => {
                 from: 'tablename',
                 orderBy: [{
                     value: 'name',
+                    alias: null,
+                    type: 'literal',
                     direction: 'asc'
                 }, {
                     value: 'createdAt',
+                    alias: null,
+                    type: 'literal',
                     direction: null
                 }]
             };
 
             const obj = new Sql2json('select * from tablename order by name asc, createdAt');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with order by and function', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    type: 'function',
+                    direction: null,
+                    value: 'avg',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'name'
+                    }]
+                }]
+            };
+
+            const obj = new Sql2json('select * from tablename order by avg(name)');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with order by and serveral functions', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    type: 'function',
+                    direction: 'asc',
+                    value: 'avg',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'name'
+                    }]
+                }, {
+                    type: 'function',
+                    direction: null,
+                    value: 'sum',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'num'
+                    }]
+                }]
+            };
+
+            const obj = new Sql2json('select * from tablename order by avg(name) asc, sum(num)');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -1419,6 +1490,8 @@ describe('sql2json', () => {
                 limit: 1,
                 orderBy: [{
                     value: 'name',
+                    alias: null,
+                    type: 'literal',
                     direction: null
                 }]
             };
