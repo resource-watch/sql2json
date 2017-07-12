@@ -340,6 +340,25 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with function', () => {
+            const data = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'count',
+                    arguments: [{
+                        value: '*',
+                        alias: null,
+                        type: 'wildcard'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT count(*) FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with false as column name', () => {
             const data = {
                 select: [{
