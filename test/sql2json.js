@@ -150,298 +150,318 @@ describe('sql2json', () => {
 
     describe('Select', () => {
 
-            it('SQL with wildcard', () => {
-                const response = {
-                    select: [{
+        it('SQL with wildcard', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select * from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with static columns', () => {
+            const response = {
+                select: [{
+                    value: '1',
+                    alias: 'group',
+                    type: 'string'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select \'1\' as group from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with one column', () => {
+            const response = {
+                select: [{
+                    value: 'column1',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select column1 from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with several columns', () => {
+            const response = {
+                select: [{
+                    value: 'column1',
+                    alias: null,
+                    type: 'literal'
+                }, {
+                    value: 'column2',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select column1, column2 from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with one column and alias', () => {
+            const response = {
+                select: [{
+                    value: 'column1',
+                    alias: 'aliascolumn',
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select column1 as aliascolumn from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with one column and alias and alias with name of function', () => {
+            const response = {
+                select: [{
+                    value: 'column1',
+                    alias: 'count',
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select column1 as count from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with several columns and one alias', () => {
+            const response = {
+                select: [{
+                    value: 'column1',
+                    alias: 'aliascolumn',
+                    type: 'literal'
+                }, {
+                    value: 'column2',
+                    alias: null,
+                    type: 'literal'
+                }, {
+                    value: 'column3',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select column1 as aliascolumn, column2, column3 from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+
+        it('SQL with function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'sum',
+                    arguments: [{
+                        value: 'column1',
+                        type: 'literal'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select sum(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'count',
+                    arguments: [{
                         value: '*',
                         alias: null,
                         type: 'wildcard'
-                    }],
-                    from: 'tablename'
-                };
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select * from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select count(*) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-            it('SQL with static columns', () => {
-                const response = {
-                    select: [{
-                        value: '1',
-                        alias: 'group',
-                        type: 'string'
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select \'1\' as group from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with one column', () => {
-                const response = {
-                    select: [{
+        it('SQL with function and alias', () => {
+            const response = {
+                select: [{
+                    alias: 'total',
+                    type: 'function',
+                    value: 'sum',
+                    arguments: [{
                         value: 'column1',
-                        alias: null,
                         type: 'literal'
-                    }],
-                    from: 'tablename'
-                };
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select column1 from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select sum(column1) as total from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-            it('SQL with several columns', () => {
-                const response = {
-                    select: [{
-                        value: 'column1',
-                        alias: null,
-                        type: 'literal'
+        it('SQL with gee function', () => {
+            const response = {
+                select: [{
+                    alias: 'total',
+                    type: 'function',
+                    value: 'ST_HISTOGRAM',
+                    arguments: []
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select ST_HISTOGRAM() as total from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with distinct', () => {
+            const response = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select distinct countries from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with distinct with several files', () => {
+            const response = {
+                select: [{
+                    type: 'distinct',
+                    arguments: [{
+                        value: 'countries',
+                        type: 'literal',
+                        alias: null
                     }, {
-                        value: 'column2',
-                        alias: null,
-                        type: 'literal'
-                    }],
-                    from: 'tablename'
-                };
+                        value: 'cities',
+                        type: 'literal',
+                        alias: null
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select column1, column2 from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select distinct countries, cities from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-            it('SQL with one column and alias', () => {
-                const response = {
-                    select: [{
+        it('SQL with FIRST function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'first',
+                    arguments: [{
                         value: 'column1',
-                        alias: 'aliascolumn',
                         type: 'literal'
-                    }],
-                    from: 'tablename'
-                };
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select column1 as aliascolumn from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select first(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-            it('SQL with one column and alias and alias with name of function', () => {
-                const response = {
-                    select: [{
+        it('SQL with LAST function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'last',
+                    arguments: [{
                         value: 'column1',
-                        alias: 'count',
                         type: 'literal'
-                    }],
-                    from: 'tablename'
-                };
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select column1 as count from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select last(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
-            it('SQL with several columns and one alias', () => {
-                const response = {
-                    select: [{
-                        value: 'column1',
-                        alias: 'aliascolumn',
+        it('SQL with ST_BANDMETADATA function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'ST_BANDMETADATA',
+                    arguments: [{
+                            value: 'rast',
+                            type: 'literal'
+                        },
+                        {
+                            value: 1,
+                            type: 'number'
+                        }
+                    ]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select ST_BANDMETADATA(rast, 1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with sum and count inside function', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'sum',
+                    arguments: [{
+                        value: 'count',
                         type: 'literal'
-                    }, {
-                        value: 'column2',
-                        alias: null,
-                        type: 'literal'
-                    }, {
-                        value: 'column3',
-                        alias: null,
-                        type: 'literal'
-                    }],
-                    from: 'tablename'
-                };
+                    }]
+                }],
+                from: 'tablename'
+            };
 
-                const obj = new Sql2json('select column1 as aliascolumn, column2, column3 from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-
-            it('SQL with function', () => {
-                const response = {
-                    select: [{
-                        alias: null,
-                        type: 'function',
-                        value: 'sum',
-                        arguments: [{
-                            value: 'column1',
-                            type: 'literal'
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select sum(column1) from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with function and alias', () => {
-                const response = {
-                    select: [{
-                        alias: 'total',
-                        type: 'function',
-                        value: 'sum',
-                        arguments: [{
-                            value: 'column1',
-                            type: 'literal'
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select sum(column1) as total from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with gee function', () => {
-                const response = {
-                    select: [{
-                        alias: 'total',
-                        type: 'function',
-                        value: 'ST_HISTOGRAM',
-                        arguments: []
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select ST_HISTOGRAM() as total from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with distinct', () => {
-                const response = {
-                    select: [{
-                        type: 'distinct',
-                        arguments: [{
-                            value: 'countries',
-                            type: 'literal',
-                            alias: null
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select distinct countries from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with distinct with several files', () => {
-                const response = {
-                    select: [{
-                        type: 'distinct',
-                        arguments: [{
-                            value: 'countries',
-                            type: 'literal',
-                            alias: null
-                        }, {
-                            value: 'cities',
-                            type: 'literal',
-                            alias: null
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select distinct countries, cities from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with FIRST function', () => {
-                const response = {
-                    select: [{
-                        alias: null,
-                        type: 'function',
-                        value: 'first',
-                        arguments: [{
-                            value: 'column1',
-                            type: 'literal'
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select first(column1) from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with LAST function', () => {
-                const response = {
-                    select: [{
-                        alias: null,
-                        type: 'function',
-                        value: 'last',
-                        arguments: [{
-                            value: 'column1',
-                            type: 'literal'
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select last(column1) from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with ST_BANDMETADATA function', () => {
-                const response = {
-                    select: [{
-                        alias: null,
-                        type: 'function',
-                        value: 'ST_BANDMETADATA',
-                        arguments: [{
-                                value: 'rast',
-                                type: 'literal'
-                            },
-                            {
-                                value: 1,
-                                type: 'number'
-                            }
-                        ]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select ST_BANDMETADATA(rast, 1) from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
-
-            it('SQL with sum and count inside function', () => {
-                const response = {
-                    select: [{
-                        alias: null,
-                        type: 'function',
-                        value: 'sum',
-                        arguments: [{
-                            value: 'count',
-                            type: 'literal'
-                        }]
-                    }],
-                    from: 'tablename'
-                };
-
-                const obj = new Sql2json('select sum(count) from tablename');
-                const json = obj.toJSON();
-                json.should.deepEqual(response);
-            });
+            const obj = new Sql2json('select sum(count) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
 
         it('SQL with false as column name', () => {
             const response = {
@@ -1519,13 +1539,14 @@ describe('sql2json', () => {
                         alias: null,
                         value: 'st_transform',
                         arguments: [{
-                            value: 'the_raster_webmercator',
-                            type: 'literal'
-                        },
-                        {
-                            value: 4326,
-                            type: 'number'
-                        }]
+                                value: 'the_raster_webmercator',
+                                type: 'literal'
+                            },
+                            {
+                                value: 4326,
+                                type: 'number'
+                            }
+                        ]
                     }, {
                         type: 'function',
                         alias: null,
