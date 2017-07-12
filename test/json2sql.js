@@ -358,6 +358,82 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with sum', () => {
+            const data = {
+                select: [{
+                    type: 'math',
+                    value: '+',
+                    arguments: [{
+                        type: 'literal',
+                        value: 'data',
+                        alias: null
+                    }, {
+                        type: 'number',
+                        value: 1000
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT data + 1000 FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('SQL with round and +', () => {
+            const data = {
+                select: [{
+                    type: 'math',
+                    value: '+',
+                    arguments: [{
+                        type: 'function',
+                        value: 'round',
+                        alias: null,
+                        arguments: [{
+                            type: 'literal',
+                            value: 'data'
+                        }]
+                    }, {
+                        type: 'number',
+                        value: 1000
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT round(data) + 1000 FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('SQL with round, sum and +', () => {
+            const data = {
+                select: [{
+                    type: 'function',
+                    value: 'sum',
+                    alias: null,
+                    arguments: [{
+                        type: 'math',
+                        value: '/',
+                        arguments: [{
+                            type: 'function',
+                            value: 'round',
+                            alias: null,
+                            arguments: [{
+                                type: 'literal',
+                                value: 'data'
+                            }]
+                        }, {
+                            type: 'number',
+                            value: 1000
+                        }]
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT sum(round(data) / 1000) FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         
     });
     describe('OrderBy', () => {
