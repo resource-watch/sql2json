@@ -170,6 +170,25 @@ describe('json2sql', () => {
 
         });
 
+        it('SQL with function shape', () => {
+            const data = {
+                select: [{
+                    value: 'Shape.STLength',
+                    alias: null,
+                    type: 'function',
+                    arguments: []
+                }, {
+                    value: 'x',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT Shape.STLength(), x FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with static columns', () => {
             const data = {
                 select: [{

@@ -165,7 +165,7 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
-        it('SQL with wildcard', () => {
+        it('SQL with values as name column', () => {
             const response = {
                 select: [{
                     value: '"values"',
@@ -176,6 +176,27 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select "values" as x from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+
+        it('SQL with function shape', () => {
+            const response = {
+                select: [{
+                    value: 'Shape.STLength',
+                    alias: null,
+                    type: 'function',
+                    arguments: []
+                }, {
+                    value: 'x',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('SELECT Shape.STLength(), x from tablename');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
