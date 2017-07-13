@@ -886,10 +886,10 @@ describe('sql2json', () => {
                     type: 'in',
                     value: 'data',
                     arguments: [{
-                        value: 'a',
+                        value: '\'a\'',
                         type: 'string'
                     }, {
-                        value: 'b',
+                        value: '\'b\'',
                         type: 'string'
                     }]
                 }
@@ -1065,10 +1065,10 @@ describe('sql2json', () => {
                         value: 'confidence',
                         arguments: [{
                             type: 'string',
-                            value: 'nominal'
+                            value: '\'nominal\''
                         }, {
                             type: 'string',
-                            value: '0'
+                            value: '\'0\''
                         }]
                     },
                     right: {
