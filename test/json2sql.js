@@ -173,10 +173,9 @@ describe('json2sql', () => {
         it('SQL with function shape', () => {
             const data = {
                 select: [{
-                    value: 'Shape.STLength',
+                    value: 'Shape.STLength()',
                     alias: null,
-                    type: 'function',
-                    arguments: []
+                    type: 'literal'
                 }, {
                     value: 'x',
                     alias: null,
@@ -820,7 +819,7 @@ describe('json2sql', () => {
                         value: 'the_geom',
                         type: 'literal'
                     }, {
-                        value: '{}',
+                        value: '\'{}\'',
                         type: 'string'
                     }]
                 }
@@ -850,7 +849,7 @@ describe('json2sql', () => {
                         type: 'function',
                         alias: null,
                         arguments: [{
-                            value: '{}',
+                            value: '\'{}\'',
                             type: 'string'
                         }]
                     }]
@@ -1023,10 +1022,10 @@ describe('json2sql', () => {
                     type: 'in',
                     value: 'data',
                     arguments: [{
-                        value: 'a',
+                        value: '\'a\'',
                         type: 'string'
                     }, {
-                        value: 'b',
+                        value: '\'b\'',
                         type: 'string'
                     }]
                 }
@@ -1077,7 +1076,7 @@ describe('json2sql', () => {
                     },
                     value: '=',
                     right: {
-                        value: 'BRA',
+                        value: '\'BRA\'',
                         type: 'string'
                     }
                 }
@@ -1103,7 +1102,7 @@ describe('json2sql', () => {
                     },
                     value: '=',
                     right: {
-                        value: 'BRA',
+                        value: '\'BRA\'',
                         type: 'string'
                     }
                 }

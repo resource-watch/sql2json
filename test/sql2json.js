@@ -184,10 +184,9 @@ describe('sql2json', () => {
         it('SQL with function shape', () => {
             const response = {
                 select: [{
-                    value: 'Shape.STLength',
+                    value: 'Shape.STLength()',
                     alias: null,
-                    type: 'function',
-                    arguments: []
+                    type: 'literal'
                 }, {
                     value: 'x',
                     alias: null,
@@ -676,7 +675,7 @@ describe('sql2json', () => {
                         value: 'the_geom',
                         type: 'literal'
                     }, {
-                        value: '{}',
+                        value: '\'{}\'',
                         type: 'string'
                     }]
                 }
@@ -708,7 +707,7 @@ describe('sql2json', () => {
                         type: 'function',
                         alias: null,
                         arguments:  [{
-                            value: '{}',
+                            value: '\'{}\'',
                             type: 'string'
                         }]
                     }]
@@ -1613,7 +1612,7 @@ describe('sql2json', () => {
                             alias: null,
                             value: 'st_geomfromgeojson',
                             arguments: [{
-                                value: '{"type":"Point","coordinates":[-60.25001,-9.33794]}',
+                                value: '\'{"type":"Point","coordinates":[-60.25001,-9.33794]}\'',
                                 type: 'string'
                             }]
                         }, {
