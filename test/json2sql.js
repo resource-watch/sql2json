@@ -508,6 +508,26 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with orderby with quotes', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: '"name"',
+                    alias: null,
+                    type: 'string',
+                    direction: null
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename ORDER BY "name"';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with orderby and direction', () => {
             const data = {
                 select: [{

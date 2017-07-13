@@ -943,13 +943,13 @@ describe('sql2json', () => {
                     },
                     value: '=',
                     right: {
-                        value: 'BRA',
+                        value: '\'BRA\'',
                         type: 'string'
                     }
                 }
             };
 
-            const obj = new Sql2json('select * from tablename where country_iso="BRA"');
+            const obj = new Sql2json('select * from tablename where country_iso=\'BRA\'');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -970,7 +970,7 @@ describe('sql2json', () => {
                     },
                     value: '=',
                     right: {
-                        value: 'BRA',
+                        value: '\'BRA\'',
                         type: 'string'
                     }
                 }
@@ -997,7 +997,7 @@ describe('sql2json', () => {
                     },
                     value: 'LIKE',
                     right: {
-                        value: 'BRA',
+                        value: '\'BRA\'',
                         type: 'string'
                     }
                 }
@@ -1243,6 +1243,27 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename order by name');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with orderby with quotes', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: '"name"',
+                    alias: null,
+                    type: 'string',
+                    direction: null
+                }]
+            };
+
+            const obj = new Sql2json('select * from tablename order by "name"');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
