@@ -9,7 +9,7 @@ describe('sql2json', () => {
 
         it('Error: Check throw error if create instance without sql', () => {
             try {
-                new Sql2json(null); 
+                new Sql2json(null);
                 assert(false, 'Expected throw error');
             } catch (e) {
                 e.message.should.be.equal('Sql required');
