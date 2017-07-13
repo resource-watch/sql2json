@@ -165,10 +165,25 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('SQL with wildcard', () => {
+            const response = {
+                select: [{
+                    value: '"values"',
+                    alias: 'x',
+                    type: 'string'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select "values" as x from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
         it('SQL with static columns', () => {
             const response = {
                 select: [{
-                    value: '1',
+                    value: '\'1\'',
                     alias: 'group',
                     type: 'string'
                 }],
