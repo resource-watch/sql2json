@@ -9,7 +9,7 @@ describe('sql2json', () => {
 
         it('Error: Check throw error if create instance without sql', () => {
             try {
-                new Sql2json(null);
+                new Sql2json(null); 
                 assert(false, 'Expected throw error');
             } catch (e) {
                 e.message.should.be.equal('Sql required');
@@ -164,6 +164,8 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
+
+        
 
         it('SQL with values as name column', () => {
             const response = {
@@ -623,6 +625,33 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename where id > 2');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With one comparison (negative number)', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                where: {
+                    type: 'operator',
+                    left: {
+                        value: 'id',
+                        type: 'literal'
+                    },
+                    value: '>',
+                    right: {
+                        value: -2,
+                        type: 'number'
+                    }
+                }
+            };
+
+            const obj = new Sql2json('select * from tablename where id > -2');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
