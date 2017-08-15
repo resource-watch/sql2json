@@ -113,7 +113,7 @@ describe('sql2json', () => {
         it('With function and *', () => {
             const response = {
                 select: [{
-                    value: '(ST_MetaData(the_raster_webmercator)).*',
+                    value: '( ST_MetaData(the_raster_webmercator)).*',
                     alias: null,
                     type: 'literal'
                 }],
