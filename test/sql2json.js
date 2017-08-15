@@ -98,7 +98,7 @@ describe('sql2json', () => {
         it('With function intersects', () => {
             const response = {
                 select: [{
-                    value: 'ST_Intersects( the_geom, \'{}\')',
+                    value: 'ST_Intersects(the_geom, \'{}\')',
                     alias: null,
                     type: 'literal'
                 }],
@@ -106,6 +106,21 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select ST_Intersects(the_geom, \'{}\') from tablename', true);
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('With function and *', () => {
+            const response = {
+                select: [{
+                    value: '(ST_MetaData(the_raster_webmercator)).*',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select (ST_MetaData(the_raster_webmercator)).* from tablename', true);
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -119,7 +134,7 @@ describe('sql2json', () => {
                 }],
                 from: 'tablename',
                 where: {
-                    value: 'ST_Intersects( the_geom, \'{}\')',
+                    value: 'ST_Intersects(the_geom, \'{}\')',
                     type: 'literal',
                     alias: null
                 }
@@ -138,7 +153,7 @@ describe('sql2json', () => {
                 }],
                 from: 'tablename',
                 orderBy: [{
-                    value: 'avg( name)',
+                    value: 'avg(name)',
                     type: 'literal',
                     alias: null
                 }]
@@ -158,7 +173,7 @@ describe('sql2json', () => {
                 }],
                 from: 'tablename',
                 orderBy: [{
-                    value: 'avg( name), name asc',
+                    value: 'avg(name), name asc',
                     type: 'literal',
                     alias: null
                 }]
@@ -178,7 +193,7 @@ describe('sql2json', () => {
                 }],
                 from: 'tablename',
                 group: [{
-                    value: 'ST_GeoHash( the_geom_point, 8)',
+                    value: 'ST_GeoHash(the_geom_point, 8)',
                     type: 'literal',
                     alias: null
                 }]
