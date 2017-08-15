@@ -52,6 +52,168 @@ describe('json2sql', () => {
         });
     });
 
+    describe('Experimental flag', () => {
+
+        it('With *', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT * FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With math', () => {
+            const data = {
+                select: [{
+                    value: 'data + 1000',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT data + 1000 FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With normal select', () => {
+            const data = {
+                select: [{
+                    value: 'col1, col2',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT col1, col2 FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With functions', () => {
+            const data = {
+                select: [{
+                    value: 'Shape.STLength(), x',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT Shape.STLength(), x FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With function and as', () => {
+            const data = {
+                select: [{
+                    value: 'ST_HISTOGRAM() AS total',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT ST_HISTOGRAM() AS total FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With function intersects', () => {
+            const data = {
+                select: [{
+                    value: 'ST_Intersects( the_geom, \'{}\')',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT ST_Intersects( the_geom, \'{}\') FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With where', () => {
+            const data = {
+                select: [{
+                    value: 'col1, col2',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename',
+                where: {
+                    value: 'ST_Intersects( the_geom, \'{}\')',
+                    type: 'literal',
+                    alias: null
+                }
+            };
+
+            const response = 'SELECT col1, col2 FROM tablename WHERE ST_Intersects( the_geom, \'{}\')';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+        it('With orderby', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'avg( name)',
+                    type: 'literal',
+                    alias: null
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename ORDER BY avg( name)';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With orderby', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 'avg( name), name asc',
+                    type: 'literal',
+                    alias: null
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename ORDER BY avg( name), name asc';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('With groupby', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename',
+                group: [{
+                    value: 'ST_GeoHash( the_geom_point, 8)',
+                    type: 'literal',
+                    alias: null
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash( the_geom_point, 8)';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+    });
+
     describe('From', () => {
 
         it('With table name', () => {
