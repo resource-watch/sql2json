@@ -317,6 +317,20 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with number of name of columns', () => {
+            const data = {
+                select: [{
+                    value: 123,
+                    alias: null,
+                    type: 'number'
+                }],
+                from: 'tablename'
+            };
+
+            const response = 'SELECT 123 FROM tablename';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with wildcard', () => {
             const data = {
                 select: [{
@@ -669,6 +683,26 @@ describe('json2sql', () => {
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
+        it('SQL with number of name of columns', () => {
+            const data = {
+                select: [{
+                    value: 123,
+                    alias: null,
+                    type: 'number'
+                }],
+                from: 'tablename',
+                orderBy: [{
+                    value: 123,
+                    alias: null,
+                    type: 'number',
+                    direction: null
+                }]
+            };
+
+            const response = 'SELECT 123 FROM tablename ORDER BY 123';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
         it('SQL with orderby with quotes', () => {
             const data = {
                 select: [{
@@ -823,6 +857,24 @@ describe('json2sql', () => {
             };
 
             const response = 'SELECT * FROM tablename GROUP BY name';
+            Json2sql.toSQL(data).should.deepEqual(response);
+        });
+
+        it('Group by number of column name', () => {
+            const data = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'number',
+                    value: 123
+                }]
+            };
+
+            const response = 'SELECT * FROM tablename GROUP BY 123';
             Json2sql.toSQL(data).should.deepEqual(response);
         });
 
