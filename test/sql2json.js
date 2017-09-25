@@ -366,7 +366,7 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
-        
+
 
         // it('SQL with values as name column', () => {
         //     const response = {
