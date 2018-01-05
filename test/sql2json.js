@@ -1471,6 +1471,64 @@ describe('sql2json', () => {
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
+
+        it('Where with order by and function', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'date_range',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'field'
+                    }, {
+                        type: 'literal',
+                        value: '='
+                    }, {
+                        type: 'string',
+                        value: '"insert_time"'
+                    }, {
+                        type: 'string',
+                        value: '"format"'
+                    }, {
+                        type: 'literal',
+                        value: '='
+                    }, {
+                        type: 'string',
+                        value: '"yyyy-MM-dd"'
+                    }, {
+                        type: 'string',
+                        value: '"2014-08-18"'
+                    }, {
+                        type: 'string',
+                        value: '"2014-08-17"'
+                    }, {
+                        type: 'string',
+                        value: '"now-8d"'
+                    }, {
+                        type: 'string',
+                        value: '"now-7d"'
+                    }, {
+                        type: 'string',
+                        value: '"now-6d"'
+                    }, {
+                        type: 'string',
+                        value: '"now"'
+                    }
+                    ]
+                }],
+            };
+
+            const obj = new Sql2json('SELECT * FROM tablename GROUP BY date_range(field="insert_time","format"="yyyy-MM-dd" ,"2014-08-18","2014-08-17","now-8d","now-7d","now-6d","now")');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
     });
 
     describe('OrderBy', () => {
