@@ -541,7 +541,7 @@ describe('sql2json', () => {
         });
 
 
-        it('SQL with function', () => {
+        it('SQL with function with named argument', () => {
             const response = {
                 select: [{
                     alias: null,
@@ -560,7 +560,57 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
-        it('SQL with function', () => {
+        it('SQL with fake function name', () => {
+            // The lib should not know nor care which functions are valid
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'foo',
+                    arguments: [{
+                        value: 'column1',
+                        type: 'literal'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select foo(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with nested fake functions', () => {
+            // The lib should not know nor care which functions are valid
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'foo',
+                    arguments: [{
+                        alias: null,
+                        type: 'function',
+                        value: 'bar',
+                        arguments: [{
+                            alias: null,
+                            type: 'function',
+                            value: 'roo',
+                            arguments: [{
+                                value: 'column1',
+                                type: 'literal'
+                            }]
+                        }]
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select foo(bar(roo(column1))) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with function with wildcard argument', () => {
             const response = {
                 select: [{
                     alias: null,
@@ -1452,6 +1502,67 @@ describe('sql2json', () => {
         });
 
         it('Group with function', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'ST_GeoHash',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'the_geom_point'
+                    }, {
+                        type: 'number',
+                        value: 8
+                    }]
+                }],
+
+            };
+
+            const obj = new Sql2json('select * from tablename group by ST_GeoHash(the_geom_point, 8)');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('Group with nested functions', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'ST_GeoHash',
+                    alias: null,
+                    arguments: [{
+                        type: 'literal',
+                        value: 'the_geom_point'
+                    }, {
+                        type: 'function',
+                        value: 'foo',
+                        alias: null,
+                        arguments: [{
+                            type: 'number',
+                            value: 8
+                        }]
+                    }]
+                }],
+
+            };
+
+            const obj = new Sql2json('select * from tablename group by ST_GeoHash(the_geom_point, foo(8))');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('Group with random function', () => {
             const response = {
                 select: [{
                     value: '*',
