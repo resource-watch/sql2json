@@ -95,6 +95,21 @@ describe('sql2json', () => {
             json.should.deepEqual(response);
         });
 
+        it('With function with variable name', () => {
+            const response = {
+                select: [{
+                    value: 'ST_HISTOGRAM() as total',
+                    alias: null,
+                    type: 'literal'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select ST_HISTOGRAM() as total from tablename', true);
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
         it('With function intersects', () => {
             const response = {
                 select: [{

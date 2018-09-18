@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec",
+    "test": "node $NODE_DEBUG_OPTION ./node_modules/.bin/mocha --reporter spec",
     "test-watch": "./node_modules/.bin/mocha -w --reporter spec"
   },
   "keywords": [],
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "assert": "^1.4.1",
-    "mocha": "^3.2.0",
+    "mocha": "5.2.0",
     "should": "^11.1.2",
     "babel-eslint": "^6.1.0",
     "eslint": "^3.14.0",
