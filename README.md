@@ -1,6 +1,8 @@
 # SQL2JSON
 
-Library that it parse sql queries and return the json with the representation of the query.
+[![Build Status](https://travis-ci.org/resource-watch/sql2json.svg?branch=master)](https://travis-ci.org/resource-watch/sql2json)
+
+Library that parses SQL queries and returns the JSON with the representation of the query.
 
 Example:
 
