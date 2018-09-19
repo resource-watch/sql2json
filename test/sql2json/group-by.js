@@ -153,6 +153,60 @@ describe('SQL to JSON - Group By', () => {
         json.should.deepEqual(response);
     });
 
+    it('Group with function with column name (no quotes) and constant as arguments', () => {
+        const response = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [{
+                    type: 'literal',
+                    value: 'createdAt'
+                }, {
+                    type: 'string',
+                    value: '1d'
+                }]
+            }],
+        };
+
+        const obj = new Sql2json('select * from tablename group by date_histogram(createdAt, \'1d\')');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
+    it('Group with function with column name (double quotes) and constant as arguments', () => {
+        const response = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [{
+                    type: 'literal',
+                    value: 'createdAt'
+                }, {
+                    type: 'string',
+                    value: '1d'
+                }]
+            }],
+        };
+
+        const obj = new Sql2json('select * from tablename group by date_histogram("createdAt", \'1d\')');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
     it('Group with nested functions', () => {
         const response = {
             select: [{

@@ -36,7 +36,23 @@ describe('SQL to JSON - Select', () => {
     });
 
 
-    it('SQL with values as name column', () => {
+    it('SQL with literal as name column', () => {
+        const response = {
+            select: [{
+                value: 'values',
+                alias: 'x',
+                type: 'literal'
+            }],
+            from: 'tablename'
+        };
+
+        const obj = new Sql2json('select "values" as x from tablename');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
+
+    it('SQL with string as name column', () => {
         const response = {
             select: [{
                 value: 'values',
@@ -46,7 +62,7 @@ describe('SQL to JSON - Select', () => {
             from: 'tablename'
         };
 
-        const obj = new Sql2json('select "values" as x from tablename');
+        const obj = new Sql2json('select \'values\' as x from tablename');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });

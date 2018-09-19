@@ -322,7 +322,7 @@ describe('SQL to JSON - Where', () => {
                     type: 'string'
                 }, {
                     value: 'b',
-                    type: 'string'
+                    type: 'literal'
                 }]
             }
         };
