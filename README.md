@@ -1,6 +1,7 @@
 # SQL2JSON
 
 [![Build Status](https://travis-ci.org/resource-watch/sql2json.svg?branch=master)](https://travis-ci.org/resource-watch/sql2json)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1999d7d2910273c0c7f4/test_coverage)](https://codeclimate.com/github/resource-watch/sql2json/test_coverage)
 
 Library that converts PostgreSQL queries to/from JSON representation of the query.
 
