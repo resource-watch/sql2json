@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/resource-watch/sql2json.svg?branch=master)](https://travis-ci.org/resource-watch/sql2json)
 
-Library that parses SQL queries and returns the JSON with the representation of the query.
+Library that converts PostgreSQL queries to/from JSON representation of the query.
 
 Example:
 
@@ -68,8 +68,23 @@ Return this object:
 }
 ```
 
-The library supports POSGis functions.
+## SQL support
 
+#### Supported
+- `select` queries
+- `delete` queries
+- field alias
+- `*` in select clause
+- functions with and without arguments
+- basic math operators
+- constants
+
+#### Unsupported
+- Anything other than `select` and `delete` queries
+- Subqueries
+- Joins
+- conditionals
+- pretty much everything that's not covered in the tests
 
 
 ## Installation
