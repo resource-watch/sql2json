@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coverage": "node $NODE_DEBUG_OPTION ./node_modules/.bin/nyc mocha --reporter spec test/**/*.js",
+    "coverage": "node $NODE_DEBUG_OPTION ./node_modules/.bin/nyc --report-dir=coverage --reporter=lcov mocha --reporter spec test/**/*.js",
     "test": "node $NODE_DEBUG_OPTION ./node_modules/.bin/mocha --reporter spec test/**/*.js",
     "test-watch": "./node_modules/.bin/mocha -w --reporter spec"
   },
