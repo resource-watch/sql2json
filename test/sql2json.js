@@ -422,9 +422,10 @@ describe('sql2json', () => {
         it('SQL with function shape', () => {
             const response = {
                 select: [{
-                    value: 'Shape.STLength()',
+                    type: 'function',
                     alias: null,
-                    type: 'literal'
+                    value: 'Shape.STLength',
+                    arguments: []
                 }, {
                     value: 'x',
                     alias: null,
@@ -449,6 +450,21 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select \'1\' as group from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('SQL with mixed constants as columns', () => {
+            const response = {
+                select: [{
+                    value: "'1m'",
+                    alias: 'group',
+                    type: 'string'
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select \'1m\' as group from tablename');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -556,6 +572,26 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select sum(column1) from tablename');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+
+        it('SQL with function with constants as arguments', () => {
+            const response = {
+                select: [{
+                    alias: null,
+                    type: 'function',
+                    value: 'sum',
+                    arguments: [{
+                        value: "'1d'",
+                        type: 'string'
+                    }]
+                }],
+                from: 'tablename'
+            };
+
+            const obj = new Sql2json('select sum(\'1d\') from tablename');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
@@ -1525,6 +1561,34 @@ describe('sql2json', () => {
             };
 
             const obj = new Sql2json('select * from tablename group by ST_GeoHash(the_geom_point, 8)');
+            const json = obj.toJSON();
+            json.should.deepEqual(response);
+        });
+
+        it('Group with function with constant as argument', () => {
+            const response = {
+                select: [{
+                    value: '*',
+                    alias: null,
+                    type: 'wildcard'
+                }],
+                from: 'tablename',
+                group: [{
+                    type: 'function',
+                    value: 'ST_GeoHash',
+                    alias: null,
+                    arguments: [{
+                        type: 'string',
+                        value: "'1d'"
+                    }, {
+                        type: 'number',
+                        value: 8
+                    }]
+                }],
+
+            };
+
+            const obj = new Sql2json('select * from tablename group by ST_GeoHash(\'1d\', 8)');
             const json = obj.toJSON();
             json.should.deepEqual(response);
         });
