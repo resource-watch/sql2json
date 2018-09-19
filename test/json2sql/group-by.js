@@ -119,5 +119,61 @@ describe('JSON to SQL - GroupBy', () => {
         const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash("the_geom_point",8)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
+
+    it('Group with function with column name (double quotes) and constant as arguments', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [{
+                    type: 'literal',
+                    value: 'createdAt'
+                }, {
+                    type: 'string',
+                    value: '1d'
+                }]
+            }],
+        };
+
+        const response = 'SELECT * FROM tablename GROUP BY date_histogram("createdAt",\'1d\')';
+        Json2sql.toSQL(data).should.deepEqual(response);
+
+    });
+
+    it('Group with function with named arguments', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [{
+                    type: 'literal',
+                    name: 'field',
+                    value: 'createdAt'
+                }, {
+                    type: 'string',
+                    name: 'interval',
+                    value: '1d'
+                }]
+            }],
+        };
+
+        const response = 'SELECT * FROM tablename GROUP BY date_histogram( \'field\'="createdAt", \'interval\'=\'1d\')';
+        Json2sql.toSQL(data).should.deepEqual(response);
+
+    });
 });
 
