@@ -1,27 +1,45 @@
 {
   "name": "sql2json",
-  "version": "1.6.5",
-  "description": "",
+  "version": "2.0.0",
+  "description": "PostgreSQL to/from JSON conversion lib",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec",
+    "coverage": "node $NODE_DEBUG_OPTION ./node_modules/.bin/nyc --report-dir=coverage --reporter=lcov mocha --reporter spec test/**/*.js",
+    "test": "node $NODE_DEBUG_OPTION ./node_modules/.bin/mocha --reporter spec test/**/*.js",
     "test-watch": "./node_modules/.bin/mocha -w --reporter spec"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "sql",
+    "postgres",
+    "postgresql",
+    "json"
+  ],
+  "author": {
+    "name": "Raul Requero"
+  },
+  "contributors": [
+    {
+      "name": "Sergio Gordillo"
+    },
+    {
+      "name": "Tiago Garcia",
+      "url": "https://github.com/tiagojsag"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "sql-parser": "git+http://github.com/rrequero/sql-parser.git#master"
   },
   "devDependencies": {
     "assert": "^1.4.1",
-    "mocha": "^3.2.0",
-    "should": "^11.1.2",
     "babel-eslint": "^6.1.0",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.5.3",
-    "eslint-plugin-react": "^5.2.2"
+    "eslint-plugin-react": "^5.2.2",
+    "mocha": "5.2.0",
+    "nyc": "^13.0.1",
+    "should": "^11.1.2"
   }
 }
