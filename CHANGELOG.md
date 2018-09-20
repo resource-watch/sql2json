@@ -7,3 +7,4 @@
 - JSON2SQL - `literal` types are now wrapped in double quotes  when query is generated
 - JSON2SQL - `string` types are now wrapped in single quotes when query is generated  
 - Added support for named arguments in `GROUP BY` function calls
+- Wrap literals in double quotes on `GROUP BY` clauses

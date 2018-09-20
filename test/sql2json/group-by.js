@@ -18,7 +18,7 @@ describe('SQL to JSON - Group By', () => {
             }]
         };
 
-        const obj = new Sql2json('select * from tablename group by name');
+        const obj = new Sql2json('select * from tablename group by "name"');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });
@@ -59,7 +59,7 @@ describe('SQL to JSON - Group By', () => {
             }]
         };
 
-        const obj = new Sql2json('select * from tablename group by name, surname');
+        const obj = new Sql2json('select * from tablename group by "name", "surname"');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });

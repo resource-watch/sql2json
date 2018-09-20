@@ -279,13 +279,24 @@ describe('JSON to SQL - Experimental flag', () => {
             }],
             from: 'tablename',
             group: [{
-                value: 'ST_GeoHash( the_geom_point, 8)',
-                type: 'literal',
-                alias: null
+                value: 'ST_GeoHash',
+                type: 'function',
+                alias: null,
+                arguments: [
+                    {
+                        value: 'the_geom_point',
+                        type: 'literal',
+                        alias: null
+                    }, {
+                        value: '8',
+                        type: 'number',
+                        alias: null
+                    }
+                ]
             }]
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash( the_geom_point, 8)';
+        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash("the_geom_point",8)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 });
