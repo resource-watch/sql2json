@@ -18,7 +18,7 @@ describe('JSON to SQL - GroupBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY "name"';
+        const response = 'SELECT * FROM tablename GROUP BY name';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -57,7 +57,7 @@ describe('JSON to SQL - GroupBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY "name", "surname"';
+        const response = 'SELECT * FROM tablename GROUP BY name, surname';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -89,7 +89,7 @@ describe('JSON to SQL - GroupBy', () => {
             }
         };
 
-        const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY "name", "surname"';
+        const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY name, surname';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -116,7 +116,7 @@ describe('JSON to SQL - GroupBy', () => {
 
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash("the_geom_point",8)';
+        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash(the_geom_point,8)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -142,7 +142,7 @@ describe('JSON to SQL - GroupBy', () => {
             }],
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY date_histogram("createdAt",\'1d\')';
+        const response = 'SELECT * FROM tablename GROUP BY date_histogram(createdAt,\'1d\')';
         Json2sql.toSQL(data).should.deepEqual(response);
 
     });

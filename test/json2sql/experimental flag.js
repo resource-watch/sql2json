@@ -29,7 +29,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "data + 1000" FROM tablename';
+        const response = 'SELECT data + 1000 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -50,7 +50,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "data" + 1000 FROM tablename';
+        const response = 'SELECT data + 1000 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -64,7 +64,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "col1, col2" FROM tablename';
+        const response = 'SELECT col1, col2 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -82,7 +82,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "col1", "col2" FROM tablename';
+        const response = 'SELECT col1, col2 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -96,7 +96,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "Shape.STLength(), x" FROM tablename';
+        const response = 'SELECT Shape.STLength(), x FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -115,7 +115,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT Shape.STLength(), "x" FROM tablename';
+        const response = 'SELECT Shape.STLength(), x FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -155,7 +155,7 @@ describe('JSON to SQL - Experimental flag', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT ST_Intersects("the_geom",\'{}\') FROM tablename';
+        const response = 'SELECT ST_Intersects(the_geom,\'{}\') FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -190,7 +190,7 @@ describe('JSON to SQL - Experimental flag', () => {
             }
         };
 
-        const response = 'SELECT "col1", "col2" FROM tablename WHERE ST_Intersects(the_geom, \'{}\')';
+        const response = 'SELECT col1, col2 FROM tablename WHERE ST_Intersects(the_geom, \'{}\')';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -209,7 +209,7 @@ describe('JSON to SQL - Experimental flag', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY "avg( name)"';
+        const response = 'SELECT * FROM tablename ORDER BY avg( name)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -235,7 +235,7 @@ describe('JSON to SQL - Experimental flag', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY avg("name")';
+        const response = 'SELECT * FROM tablename ORDER BY avg(name)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -266,7 +266,7 @@ describe('JSON to SQL - Experimental flag', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY avg("name"), "name" asc';
+        const response = 'SELECT * FROM tablename ORDER BY avg(name), name asc';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -296,7 +296,7 @@ describe('JSON to SQL - Experimental flag', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash("the_geom_point",8)';
+        const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash(the_geom_point,8)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 });

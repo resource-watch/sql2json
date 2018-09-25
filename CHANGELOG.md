@@ -1,5 +1,7 @@
-# 2.0
+# 2.0.1
+- JSON2SQL - Revert changes to query output format, matching it to ES SQL instead of PostrgreSQL spec
 
+# 2.0.0
 - SQL2JSON - functions with no arguments are now parsed as functions, not literals
 - SQL2JSON - `string` types are now stored without quotes/double quotes
 - SQL2JSON - Unsupported query types now throw an exception when parsing
