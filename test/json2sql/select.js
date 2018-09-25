@@ -62,7 +62,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT Shape.STLength(), "x" FROM tablename';
+        const response = 'SELECT Shape.STLength(), x FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -90,7 +90,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "column1" FROM tablename';
+        const response = 'SELECT column1 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -108,7 +108,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "column1", "column2" FROM tablename';
+        const response = 'SELECT column1, column2 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -122,7 +122,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "column1" AS aliascolumn FROM tablename';
+        const response = 'SELECT column1 AS aliascolumn FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -136,7 +136,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "column1" AS count FROM tablename';
+        const response = 'SELECT column1 AS count FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -158,7 +158,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "column1" AS aliascolumn, "column2", "column3" FROM tablename';
+        const response = 'SELECT column1 AS aliascolumn, column2, column3 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -176,7 +176,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT sum("column1") FROM tablename';
+        const response = 'SELECT sum(column1) FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -194,7 +194,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT sum("column1") AS total FROM tablename';
+        const response = 'SELECT sum(column1) AS total FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -226,7 +226,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT DISTINCT "countries" FROM tablename';
+        const response = 'SELECT DISTINCT countries FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -247,7 +247,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT DISTINCT "countries", "cities" FROM tablename';
+        const response = 'SELECT DISTINCT countries, cities FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -284,7 +284,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "false", "name" FROM tablename';
+        const response = 'SELECT false, name FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -302,7 +302,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT false, "name" FROM tablename';
+        const response = 'SELECT false, name FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -323,7 +323,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT "data" + 1000 FROM tablename';
+        const response = 'SELECT data + 1000 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -348,7 +348,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT round("data") + 1000 FROM tablename';
+        const response = 'SELECT round(data) + 1000 FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -378,7 +378,7 @@ describe('JSON to SQL - Select', () => {
             from: 'tablename'
         };
 
-        const response = 'SELECT sum(round("data") / 1000) FROM tablename';
+        const response = 'SELECT sum(round(data) / 1000) FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 

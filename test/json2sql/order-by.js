@@ -19,7 +19,7 @@ describe('JSON to SQL - OrderBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY "name"';
+        const response = 'SELECT * FROM tablename ORDER BY name';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -59,7 +59,7 @@ describe('JSON to SQL - OrderBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY "name"';
+        const response = 'SELECT * FROM tablename ORDER BY name';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -80,7 +80,7 @@ describe('JSON to SQL - OrderBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY "name"';
+        const response = 'SELECT * FROM tablename ORDER BY name';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -164,7 +164,7 @@ describe('JSON to SQL - OrderBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY avg("name")';
+        const response = 'SELECT * FROM tablename ORDER BY avg(name)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -197,7 +197,7 @@ describe('JSON to SQL - OrderBy', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename ORDER BY avg("name") asc, sum("num")';
+        const response = 'SELECT * FROM tablename ORDER BY avg(name) asc, sum(num)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 });

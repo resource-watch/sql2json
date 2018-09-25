@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.org/resource-watch/sql2json.svg?branch=master)](https://travis-ci.org/resource-watch/sql2json)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1999d7d2910273c0c7f4/test_coverage)](https://codeclimate.com/github/resource-watch/sql2json/test_coverage)
 
-Library that converts PostgreSQL queries to/from JSON representation of the query.
+Library that serves two main purposes:
+- Converts SQL queries to JSON representation of the query.
+- Converts JSON representation of the query to SQL (as supported by [ElasticSearch's SQL plugin](https://github.com/NLPchina/elasticsearch-sql)
 
 Example:
 

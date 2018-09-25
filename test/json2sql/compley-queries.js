@@ -38,7 +38,7 @@ describe('JSON to SQL - Complex queries', () => {
             }]
         };
 
-        const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY "name", "surname" ORDER BY "name" LIMIT 1';
+        const response = 'SELECT * FROM tablename WHERE data BETWEEN 1 AND 3 GROUP BY name, surname ORDER BY name LIMIT 1';
         CompleyQueries.toSQL(data).should.deepEqual(response);
     });
 });
