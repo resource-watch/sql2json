@@ -1,3 +1,6 @@
+# 2.0.2
+- Table names not surrounded by quotes now support slashes in them
+
 # 2.0.1
 - JSON2SQL - Revert changes to query output format, matching it to ES SQL instead of PostrgreSQL spec
 
