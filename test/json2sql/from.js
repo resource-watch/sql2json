@@ -61,6 +61,20 @@ describe('JSON to SQL - From', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
+    it('With table name with slash without quotes', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'ft:table/name'
+        };
+
+        const response = 'SELECT * FROM ft:table/name';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
     it('With table name inside dots', () => {
         const data = {
             select: [{

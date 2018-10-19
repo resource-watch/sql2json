@@ -4,7 +4,7 @@ require('should');
 
 
 describe('SQL to JSON - Complex queries', () => {
-    it('All', () => {
+    it('Complex query 1', () => {
         const response = {
             select: [{
                 type: 'function',
