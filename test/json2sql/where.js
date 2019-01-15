@@ -422,6 +422,58 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
+    it('With like', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            where: {
+                type: 'operator',
+                left: {
+                    value: 'country_iso',
+                    type: 'literal'
+                },
+                value: 'LIKE',
+                right: {
+                    value: 'BRA',
+                    type: 'string'
+                }
+            }
+        };
+
+        const response = 'SELECT * FROM tablename WHERE country_iso LIKE \'BRA\'';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With like and string wildcard', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            where: {
+                type: 'operator',
+                left: {
+                    value: 'country_iso',
+                    type: 'literal'
+                },
+                value: 'LIKE',
+                right: {
+                    value: '%BRA%',
+                    type: 'string'
+                }
+            }
+        };
+
+        const response = 'SELECT * FROM tablename WHERE country_iso LIKE \'%BRA%\'';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
     it('Where with false name column', () => {
         const data = {
             select: [{

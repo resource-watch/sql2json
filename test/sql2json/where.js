@@ -439,6 +439,33 @@ describe('SQL to JSON - Where', () => {
         json.should.deepEqual(response);
     });
 
+    it('With like and wildcards', () => {
+        const response = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            where: {
+                type: 'operator',
+                left: {
+                    value: 'country_iso',
+                    type: 'literal'
+                },
+                value: 'LIKE',
+                right: {
+                    value: '%BRA%',
+                    type: 'string'
+                }
+            }
+        };
+
+        const obj = new Sql2json('select * from tablename where country_iso LIKE \'%BRA%\'');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
     it('With cast', () => {
         const response = {
             select: [{

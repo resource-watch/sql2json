@@ -1,3 +1,5 @@
+- Add tests for `WHERE x LIKE y` clauses containing string wildcards
+
 # 2.0.2
 - Table names not surrounded by quotes now support slashes in them
 
