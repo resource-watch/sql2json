@@ -93,7 +93,7 @@ describe('JSON to SQL - GroupBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('Group with function', () => {
+    it('With GROUP BY with function as value', () => {
         const data = {
             select: [{
                 value: '*',
@@ -117,6 +117,84 @@ describe('JSON to SQL - GroupBy', () => {
         };
 
         const response = 'SELECT * FROM tablename GROUP BY ST_GeoHash(the_geom_point,8)';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With GROUP BY with function call on column value', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'literal',
+                alias: null,
+                value: 'col1'
+            }, {
+                type: 'dot',
+            }, {
+                value: 'ST_GeoHash',
+                type: 'function',
+                alias: null,
+                arguments: [
+                    {
+                        value: 'the_geom_point',
+                        type: 'literal',
+                        alias: null
+                    }, {
+                        value: '8',
+                        type: 'number',
+                        alias: null
+                    }
+                ]
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename GROUP BY col1.ST_GeoHash(the_geom_point,8)';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('Group with BY with function call on column value with table name', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'literal',
+                alias: null,
+                value: 'tablename'
+            }, {
+                type: 'dot',
+            }, {
+                type: 'literal',
+                alias: null,
+                value: 'col1'
+            }, {
+                type: 'dot',
+            }, {
+                value: 'ST_GeoHash',
+                type: 'function',
+                alias: null,
+                arguments: [
+                    {
+                        value: 'the_geom_point',
+                        type: 'literal',
+                        alias: null
+                    }, {
+                        value: '8',
+                        type: 'number',
+                        alias: null
+                    }
+                ]
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename GROUP BY tablename.col1.ST_GeoHash(the_geom_point,8)';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 

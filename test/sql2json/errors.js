@@ -44,7 +44,7 @@ describe('SQL to JSON - Errors', () => {
         }
     });
 
-    it('Check throw error if using wrong escaping', () => {
+    it('Check throw error if using wrong escaping - case 1', () => {
         try {
             const obj = new Sql2json('SELECT \'a from foo');
             obj.toJSON();
@@ -54,9 +54,9 @@ describe('SQL to JSON - Errors', () => {
         }
     });
 
-    it('Check throw error if using wrong escaping', () => {
+    it('Check throw error if using wrong escaping - case 2', () => {
         try {
-            const obj = new Sql2json('select first(b1) as x from \'users/resourcewatch_wri/foo_024_vegetation_health_index\' where system:time_start >= 1533448800000 and ST_INTERSECTS(ST_SetSRID(ST_GeomFromGeoJSON(\'{/"type/":/"Point/",/"coordinates/":[18.632812500000004,21.289374355860424]}),4326), the_geom)');
+            const obj = new Sql2json('SELECT first(b1) as x FROM \'users/resourcewatch_wri/foo_024_vegetation_health_index\' WHERE system:time_start >= 1533448800000 and ST_INTERSECTS(ST_SetSRID(ST_GeomFromGeoJSON(\'{/"type/":/"Point/",/"coordinates/":[18.632812500000004,21.289374355860424]}),4326), the_geom)');
             obj.toJSON();
             assert(false, 'Expected throw error');
         } catch (e) {

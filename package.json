@@ -1,6 +1,6 @@
 {
   "name": "sql2json",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "PostgreSQL to/from JSON conversion lib",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "sql-parser": "git+http://github.com/rrequero/sql-parser.git#master"
+    "rw-sql-parser": "1.0.1"
   },
   "devDependencies": {
     "assert": "^1.4.1",

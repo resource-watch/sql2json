@@ -48,12 +48,19 @@ describe('JSON to SQL - Select', () => {
 
     });
 
-    it('SQL with function shape', () => {
+    it('SQL with function call on column', () => {
         const data = {
             select: [{
-                value: 'Shape.STLength',
+                type: 'literal',
                 alias: null,
-                type: 'function'
+                value: 'Shape'
+            }, {
+                type: 'dot',
+            }, {
+                type: 'function',
+                alias: null,
+                value: 'STLength',
+                arguments: []
             }, {
                 value: 'x',
                 alias: null,
@@ -63,6 +70,26 @@ describe('JSON to SQL - Select', () => {
         };
 
         const response = 'SELECT Shape.STLength(), x FROM tablename';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('SQL with function call as value', () => {
+        const data = {
+            select: [
+                {
+                    type: 'function',
+                    alias: null,
+                    value: 'STLength',
+                    arguments: []
+                }, {
+                    value: 'x',
+                    alias: null,
+                    type: 'literal'
+                }],
+            from: 'tablename'
+        };
+
+        const response = 'SELECT STLength(), x FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
@@ -198,7 +225,7 @@ describe('JSON to SQL - Select', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with gee function', () => {
+    it('SQL with GEE function', () => {
         const data = {
             select: [{
                 alias: 'total',
@@ -212,6 +239,33 @@ describe('JSON to SQL - Select', () => {
         const response = 'SELECT ST_HISTOGRAM() AS total FROM tablename';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
+
+    it('SQL with GEE function with arguments', () => {
+        const data = {
+            select: [{
+                value: 'ST_Intersects',
+                alias: null,
+                type: 'function',
+                arguments: [
+                    {
+                        value: 'the_geom',
+                        alias: null,
+                        type: 'literal'
+                    }, {
+                        value: '{}',
+                        alias: null,
+                        type: 'string'
+                    }
+
+                ]
+            }],
+            from: 'tablename'
+        };
+
+        const response = 'SELECT ST_Intersects(the_geom,\'{}\') FROM tablename';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
 
     it('SQL with distinct', () => {
         const data = {

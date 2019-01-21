@@ -13,54 +13,54 @@ describe('SQL to JSON - Brackets', () => {
             }],
             from: 'tablename',
 
-            where: {
+            where: [{
                 type: 'conditional',
                 value: 'and',
 
-                left: {
+                left: [{
                     type: 'operator',
-                    left: {
+                    left: [{
                         value: 'a',
                         type: 'literal'
-                    },
+                    }],
                     value: '>',
-                    right: {
+                    right: [{
                         value: 2,
                         type: 'number'
-                    }
-                },
-                right: {
+                    }]
+                }],
+                right: [{
                     type: 'bracket',
                     value: {
                         type: 'conditional',
                         value: 'or',
-                        left: {
+                        left: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'c',
                                 type: 'literal'
-                            },
+                            }],
                             value: '>',
-                            right: {
+                            right: [{
                                 value: 2,
                                 type: 'number'
-                            }
-                        },
-                        right: {
+                            }]
+                        }],
+                        right: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'c',
                                 type: 'literal'
-                            },
+                            }],
                             value: '<',
-                            right: {
+                            right: [{
                                 value: 0,
                                 type: 'number'
-                            }
-                        }
+                            }]
+                        }]
                     }
-                }
-            }
+                }]
+            }]
         };
 
         const obj = new Sql2json('select * from tablename where a > 2 and (c > 2 or c < 0)');
@@ -77,72 +77,72 @@ describe('SQL to JSON - Brackets', () => {
             }],
             from: 'tablename',
 
-            where: {
+            where: [{
                 type: 'conditional',
                 value: 'and',
-                left: {
+                left: [{
                     type: 'bracket',
                     value: {
                         type: 'conditional',
                         value: 'or',
-                        left: {
+                        left: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'a',
                                 type: 'literal'
-                            },
+                            }] ,
                             value: '>',
-                            right: {
+                            right: [{
                                 value: 2,
                                 type: 'number'
-                            }
-                        },
-                        right: {
+                            }]
+                        }],
+                        right: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'c',
                                 type: 'literal'
-                            },
+                            }],
                             value: '<',
-                            right: {
+                            right: [{
                                 value: 1,
                                 type: 'number'
-                            }
-                        }
+                            }]
+                        }]
                     }
-                },
-                right: {
+                }],
+                right: [{
                     type: 'bracket',
                     value: {
                         type: 'conditional',
                         value: 'or',
-                        left: {
+                        left: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'c',
                                 type: 'literal'
-                            },
+                            }],
                             value: '>',
-                            right: {
+                            right: [{
                                 value: 2,
                                 type: 'number'
-                            }
-                        },
-                        right: {
+                            }]
+                        }],
+                        right: [{
                             type: 'operator',
-                            left: {
+                            left: [{
                                 value: 'c',
                                 type: 'literal'
-                            },
+                            }],
                             value: '<',
-                            right: {
+                            right: [{
                                 value: 0,
                                 type: 'number'
-                            }
-                        }
+                            }]
+                        }]
                     }
-                }
-            }
+                }]
+            }]
         };
 
         const obj = new Sql2json('select * from tablename where (a > 2 or c < 1) and (c > 2 or c < 0)');

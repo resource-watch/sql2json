@@ -118,6 +118,48 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
+    it('With WHERE with function call on value', () => {
+        const data = {
+            select: [{
+                value: 'col1',
+                alias: null,
+                type: 'literal'
+            }, {
+                value: 'col2',
+                alias: null,
+                type: 'literal'
+            }],
+            from: 'tablename',
+            where: [
+                {
+                    type: 'literal',
+                    alias: null,
+                    value: 'col1'
+                }, {
+                    type: 'dot',
+                }, {
+                    value: 'ST_Intersects',
+                    alias: null,
+                    type: 'function',
+                    arguments: [
+                        {
+                            value: 'the_geom',
+                            alias: null,
+                            type: 'literal'
+                        }, {
+                            value: '{}',
+                            alias: null,
+                            type: 'string'
+                        }
+
+                    ]
+                }]
+        };
+
+        const response = 'SELECT col1, col2 FROM tablename WHERE col1.ST_Intersects(the_geom, \'{}\')';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
     it('With and', () => {
         const data = {
             select: [{
@@ -293,7 +335,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With betweens', () => {
+    it('With WHERE with BETWEEN', () => {
         const data = {
             select: [{
                 value: '*',
@@ -318,7 +360,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With equality', () => {
+    it('With WHERE with equality', () => {
         const data = {
             select: [{
                 value: '*',
@@ -344,7 +386,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With equality with single quotes', () => {
+    it('With WHERE with equality and single quotes', () => {
         const data = {
             select: [{
                 value: '*',
@@ -370,7 +412,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With cast', () => {
+    it('With WHERE with cast', () => {
         const data = {
             select: [{
                 value: '*',
@@ -396,33 +438,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With cast', () => {
-        const data = {
-            select: [{
-                value: '*',
-                alias: null,
-                type: 'wildcard'
-            }],
-            from: 'tablename',
-            where: {
-                type: 'operator',
-                left: {
-                    value: 'day::int',
-                    type: 'literal'
-                },
-                value: '>',
-                right: {
-                    value: 2,
-                    type: 'number'
-                }
-            }
-        };
-
-        const response = 'SELECT * FROM tablename WHERE day::int > 2';
-        Json2sql.toSQL(data).should.deepEqual(response);
-    });
-
-    it('With like', () => {
+    it('With WHERE x LIKE', () => {
         const data = {
             select: [{
                 value: '*',
@@ -448,7 +464,34 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('With like and string wildcard', () => {
+
+    it('With WHERE x NOT LIKE', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            where: {
+                type: 'operator',
+                left: {
+                    value: 'country_iso',
+                    type: 'literal'
+                },
+                value: 'NOT LIKE',
+                right: {
+                    value: 'BRA',
+                    type: 'string'
+                }
+            }
+        };
+
+        const response = 'SELECT * FROM tablename WHERE country_iso NOT LIKE \'BRA\'';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With WHERE like and string wildcard', () => {
         const data = {
             select: [{
                 value: '*',
@@ -474,7 +517,7 @@ describe('JSON to SQL - Where', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('Where with false name column', () => {
+    it('With WHERE with false name column', () => {
         const data = {
             select: [{
                 value: '*',
@@ -500,5 +543,4 @@ describe('JSON to SQL - Where', () => {
         const response = 'SELECT * FROM tablename WHERE false > 2';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
-
 });

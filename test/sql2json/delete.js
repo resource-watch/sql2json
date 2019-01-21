@@ -15,27 +15,61 @@ describe('SQL to JSON - Delete', () => {
         json.should.deepEqual(response);
     });
 
-    it('with where', () => {
+    it('with WHERE', () => {
         const response = {
             delete: true,
             from: 'tablename',
-            where: {
+            where: [{
                 type: 'operator',
-                left: {
+                left: [{
                     value: 'id',
                     type: 'literal'
-                },
+                }],
                 value: '>',
-                right: {
+                right: [{
                     value: 2,
                     type: 'number'
-                }
-            }
+                }]
+            }]
         };
 
         const obj = new Sql2json('DELETE FROM tablename WHERE id > 2');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });
+
+    it('With DELETE with WHERE and table name on condition', () => {
+        const response = {
+            delete: true,
+            from: 'tablename',
+            where: [
+                {
+                    type: 'operator',
+                    left: [
+                        {
+                            type: 'literal',
+                            value: 'tablename'
+                        }, {
+                            type: 'dot'
+                        }, {
+                            value: 'id',
+                            type: 'literal'
+                        }
+                    ],
+                    value: '>',
+                    right: [
+                        {
+                            value: 2,
+                            type: 'number'
+                        }
+                    ]
+                }]
+        };
+
+        const obj = new Sql2json('DELETE FROM tablename WHERE tablename.id > 2');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
 });
 
