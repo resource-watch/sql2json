@@ -67,13 +67,18 @@ describe('SQL to JSON - Select', () => {
         json.should.deepEqual(response);
     });
 
-
-    it('SQL with function shape', () => {
+    it('SQL with function call on column', () => {
         const response = {
             select: [{
+                type: 'literal',
+                alias: null,
+                value: 'Shape'
+            }, {
+                type: 'dot',
+            }, {
                 type: 'function',
                 alias: null,
-                value: 'Shape.STLength',
+                value: 'STLength',
                 arguments: []
             }, {
                 value: 'x',
@@ -84,6 +89,58 @@ describe('SQL to JSON - Select', () => {
         };
 
         const obj = new Sql2json('SELECT Shape.STLength(), x from tablename');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
+    it('SQL with function call on column', () => {
+        const response = {
+            select: [{
+                type: 'literal',
+                alias: null,
+                value: 'tablename'
+            }, {
+                type: 'dot',
+            },{
+                type: 'literal',
+                alias: null,
+                value: 'columnname'
+            }, {
+                type: 'dot',
+            }, {
+                type: 'function',
+                alias: null,
+                value: 'STLength',
+                arguments: []
+            }, {
+                value: 'x',
+                alias: null,
+                type: 'literal'
+            }],
+            from: 'tablename'
+        };
+
+        const obj = new Sql2json('SELECT tablename.columnname.STLength(), x from tablename');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
+    it('SQL with function call as value', () => {
+        const response = {
+            select: [{
+                type: 'function',
+                alias: null,
+                value: 'STLength',
+                arguments: []
+            }, {
+                value: 'x',
+                alias: null,
+                type: 'literal'
+            }],
+            from: 'tablename'
+        };
+
+        const obj = new Sql2json('SELECT STLength(), x from tablename');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });

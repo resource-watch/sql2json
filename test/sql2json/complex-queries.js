@@ -52,7 +52,7 @@ describe('SQL to JSON - Complex queries', () => {
                 type: 'literal',
                 value: 'surname'
             }],
-            where: {
+            where: [{
                 type: 'between',
                 value: 'data',
                 arguments: [{
@@ -62,7 +62,7 @@ describe('SQL to JSON - Complex queries', () => {
                     value: 3,
                     type: 'number'
                 }]
-            },
+            }],
             limit: 1,
             orderBy: [{
                 value: 'name',

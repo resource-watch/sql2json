@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "sql-parser": "git+http://github.com/rrequero/sql-parser.git#master"
+    "rw-sql-parser": "1.0.1"
   },
   "devDependencies": {
     "assert": "^1.4.1",

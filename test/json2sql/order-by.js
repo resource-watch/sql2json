@@ -1,10 +1,9 @@
-const assert = require('assert');
 const Json2sql = require('../../index').json2sql;
 require('should');
 
 
 describe('JSON to SQL - OrderBy', () => {
-    it('SQL with orderby', () => {
+    it('SQL with ORDER BY', () => {
         const data = {
             select: [{
                 value: '*',
@@ -23,7 +22,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with number of name of columns', () => {
+    it('SQL with ORDER BY with number of name of columns', () => {
         const data = {
             select: [{
                 value: 123,
@@ -43,7 +42,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with orderby with double quotes (literal)', () => {
+    it('SQL with ORDER BY with double quotes (literal)', () => {
         const data = {
             select: [{
                 value: '*',
@@ -64,7 +63,7 @@ describe('JSON to SQL - OrderBy', () => {
     });
 
 
-    it('SQL with order by with quotes', () => {
+    it('SQL with ORDER BY with quotes', () => {
         const data = {
             select: [{
                 value: '*',
@@ -84,7 +83,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with orderby and direction', () => {
+    it('SQL with ORDER BY and direction', () => {
         const data = {
             select: [{
                 value: '*',
@@ -102,7 +101,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with several orderby and direction', () => {
+    it('SQL with several ORDER BY and direction', () => {
         const data = {
             select: [{
                 value: '*',
@@ -123,7 +122,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with several orderby and direction 2', () => {
+    it('SQL with several ORDER BY and direction 2', () => {
         const data = {
             select: [{
                 value: '*',
@@ -144,7 +143,7 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with order by and function', () => {
+    it('With ORDER BY with function as value', () => {
         const data = {
             select: [{
                 value: '*',
@@ -153,14 +152,16 @@ describe('JSON to SQL - OrderBy', () => {
             }],
             from: 'tablename',
             orderBy: [{
-                type: 'function',
-                direction: null,
                 value: 'avg',
+                type: 'function',
                 alias: null,
-                arguments: [{
-                    type: 'literal',
-                    value: 'name'
-                }]
+                arguments: [
+                    {
+                        value: 'name',
+                        type: 'literal',
+                        alias: null
+                    }
+                ]
             }]
         };
 
@@ -168,7 +169,34 @@ describe('JSON to SQL - OrderBy', () => {
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 
-    it('SQL with order by and several functions', () => {
+    it('With ORDER BY with function as value with direction', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [{
+                value: 'avg',
+                type: 'function',
+                alias: null,
+                direction: 'asc',
+                arguments: [
+                    {
+                        value: 'name',
+                        type: 'literal',
+                        alias: null
+                    }
+                ]
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY avg(name) asc';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With ORDER BY and several functions', () => {
         const data = {
             select: [{
                 value: '*',
@@ -198,6 +226,144 @@ describe('JSON to SQL - OrderBy', () => {
         };
 
         const response = 'SELECT * FROM tablename ORDER BY avg(name) asc, sum(num)';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With ORDER BY with function call on value', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [
+                {
+                    type: 'literal',
+                    alias: null,
+                    value: 'col1'
+                }, {
+                    type: 'dot',
+                }, {
+                    value: 'avg',
+                    type: 'function',
+                    alias: null,
+                    arguments: [
+                        {
+                            value: 'name',
+                            type: 'literal',
+                            alias: null
+                        }
+                    ]
+                }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY col1.avg(name)';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With ORDER BY with function call and column name', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [{
+                value: 'avg',
+                type: 'function',
+                alias: null,
+                arguments: [
+                    {
+                        value: 'name',
+                        type: 'literal',
+                        alias: null
+                    }
+                ]
+            }, {
+                value: 'name',
+                type: 'literal',
+                alias: null,
+                direction: 'asc'
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY avg(name), name asc';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With ORDER BY with function call and column name with table', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [{
+                value: 'avg',
+                type: 'function',
+                alias: null,
+                arguments: [
+                    {
+                        value: 'name',
+                        type: 'literal',
+                        alias: null
+                    }
+                ]
+            }, {
+                value: 'tablename',
+                type: 'literal'
+            }, {
+                type: 'dot'
+            }, {
+                value: 'name',
+                type: 'literal',
+                alias: null,
+                direction: 'asc'
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY avg(name), tablename.name asc';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
+
+    it('With ORDER BY with function call on column name with table name', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [{
+                value: 'tablename',
+                type: 'literal'
+            }, {
+                type: 'dot'
+            }, {
+                value: 'name',
+                type: 'literal',
+                alias: null
+            }, {
+                type: 'dot'
+            }, {
+                value: 'avg',
+                type: 'function',
+                alias: null,
+                direction: 'asc',
+                arguments: [
+                    {
+                        value: 'name',
+                        type: 'literal',
+                        alias: null
+                    }
+                ]
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY tablename.name.avg(name) asc';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
 });
