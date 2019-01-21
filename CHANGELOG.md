@@ -1,3 +1,4 @@
+# 2.0.3
 - Add support for `NOT LIKE` clauses
 - Add support for `DOT` tokens
 - Update `sql-parser` - now `rw-sql-parser`
