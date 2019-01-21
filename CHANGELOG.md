@@ -1,3 +1,6 @@
+# 2.0.4
+- Fix BC break on exposed parsing functions
+
 # 2.0.3
 - Add support for `NOT LIKE` clauses
 - Add support for `DOT` tokens
