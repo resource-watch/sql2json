@@ -101,7 +101,7 @@ describe('SQL to JSON - Select', () => {
                 value: 'tablename'
             }, {
                 type: 'dot',
-            },{
+            }, {
                 type: 'literal',
                 alias: null,
                 value: 'columnname'
@@ -622,6 +622,43 @@ describe('SQL to JSON - Select', () => {
         };
 
         const obj = new Sql2json('select sum(round(data)/ 1000) from tablename');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
+    it('SQL with string with alias, functions, column and table name with alias, etc', () => {
+        const response = {
+            select: [
+                { value: 'bound1', alias: null, type: 'literal' },
+                { value: 'polyname', alias: null, type: 'literal' },
+                { value: 'year_data', alias: null, type: 'literal' },
+                { type: 'dot' },
+                { value: 'year', alias: 'year', type: 'literal' },
+                {
+                    type: 'function',
+                    alias: 'area',
+                    value: 'SUM',
+                    arguments: [
+                        { value: 'year_data', type: 'literal' },
+                        { type: 'dot' },
+                        { value: 'area_loss', type: 'literal' }
+                    ]
+                },
+                {
+                    type: 'function',
+                    alias: 'emissions',
+                    value: 'SUM',
+                    arguments: [
+                        { value: 'year_data', type: 'literal' },
+                        { type: 'dot' },
+                        { value: 'emissions', type: 'literal' }
+                    ]
+                }
+            ],
+            from: 'tablename'
+        };
+
+        const obj = new Sql2json('SELECT bound1, polyname, year_data.year AS year, SUM(year_data.area_loss) AS area, SUM(year_data.emissions) AS emissions FROM tablename');
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });
