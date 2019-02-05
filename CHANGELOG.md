@@ -1,3 +1,6 @@
+# 2.0.5
+- Fix issue with arguments with column and table name
+
 # 2.0.4
 - Fix BC break on exposed parsing functions
 

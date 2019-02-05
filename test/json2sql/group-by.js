@@ -249,9 +249,39 @@ describe('JSON to SQL - GroupBy', () => {
             }],
         };
 
-        const response = 'SELECT * FROM tablename GROUP BY date_histogram( \'field\'="createdAt", \'interval\'=\'1d\')';
+        const response = 'SELECT * FROM tablename GROUP BY date_histogram(\'field\'="createdAt", \'interval\'=\'1d\')';
         Json2sql.toSQL(data).should.deepEqual(response);
 
+    });
+
+    it('Group with function with table and column name as argument', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [
+                    {
+                        type: 'literal',
+                        value: 'table'
+                    }, {
+                        type: 'dot',
+                    }, {
+                        type: 'literal',
+                        value: 'column'
+                    }
+                ]
+            }]
+        };
+
+        const response = 'SELECT * FROM tablename GROUP BY date_histogram(table.column)';
+        Json2sql.toSQL(data).should.deepEqual(response);
     });
 });
 

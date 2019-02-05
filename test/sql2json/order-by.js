@@ -308,5 +308,38 @@ describe('SQL to JSON - Order By', () => {
         const json = obj.toJSON();
         json.should.deepEqual(response);
     });
+
+    it('With ORDER BY with function call with column name with table name as argument', () => {
+        const response = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [
+                {
+                    value: 'avg',
+                    type: 'function',
+                    alias: null,
+                    direction: 'asc',
+                    arguments: [
+                        {
+                            value: 'tablename',
+                            type: 'literal'
+                        }, {
+                            type: 'dot'
+                        }, {
+                            value: 'name',
+                            type: 'literal'
+                        }
+                    ]
+                }]
+        };
+
+        const obj = new Sql2json('SELECT * FROM tablename ORDER BY avg(tablename.name) asc');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "sql2json",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "PostgreSQL to/from JSON conversion lib",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,19 @@
     "json"
   ],
   "author": {
-    "name": "Raul Requero"
+    "name": "Vizzuality",
+    "email": "hello@vizzuality.com",
+    "url": "http://vizzuality.com/"
   },
   "contributors": [
     {
+      "name": "Raul Requero"
+    },
+    {
       "name": "Sergio Gordillo"
+    },
+    {
+      "name": "Enrique Cornejo"
     },
     {
       "name": "Tiago Garcia",
