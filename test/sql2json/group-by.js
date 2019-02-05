@@ -456,4 +456,35 @@ describe('SQL to JSON - Group By', () => {
         json.should.deepEqual(response);
     });
 
+    it('Group with function with table and column name as argument', () => {
+        const response = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            group: [{
+                type: 'function',
+                value: 'date_histogram',
+                alias: null,
+                arguments: [
+                    {
+                        type: 'literal',
+                        value: 'table'
+                    }, {
+                        type: 'dot',
+                    }, {
+                        type: 'literal',
+                        value: 'column'
+                    }
+                ]
+            }]
+        };
+
+        const obj = new Sql2json('SELECT * FROM tablename GROUP BY date_histogram(table.column)');
+        const json = obj.toJSON();
+        json.should.deepEqual(response);
+    });
+
 });

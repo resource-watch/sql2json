@@ -366,4 +366,37 @@ describe('JSON to SQL - OrderBy', () => {
         const response = 'SELECT * FROM tablename ORDER BY tablename.name.avg(name) asc';
         Json2sql.toSQL(data).should.deepEqual(response);
     });
+
+    it('With ORDER BY with function call with column name with table name as argument', () => {
+        const data = {
+            select: [{
+                value: '*',
+                alias: null,
+                type: 'wildcard'
+            }],
+            from: 'tablename',
+            orderBy: [
+                {
+                    value: 'avg',
+                    type: 'function',
+                    alias: null,
+                    direction: 'asc',
+                    arguments: [
+                        {
+                            value: 'tablename',
+                            type: 'literal'
+                        }, {
+                            type: 'dot'
+                        }, {
+                            value: 'name',
+                            type: 'literal',
+                            alias: null
+                        }
+                    ]
+                }]
+        };
+
+        const response = 'SELECT * FROM tablename ORDER BY avg(tablename.name) asc';
+        Json2sql.toSQL(data).should.deepEqual(response);
+    });
 });
