@@ -1,3 +1,6 @@
+# 2.0.6
+- Fix issue with json2sql conversion of DOT tokens on SELECT clauses
+
 # 2.0.5
 - Fix issue with arguments with column and table name
 

@@ -1,6 +1,6 @@
 {
   "name": "sql2json",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "PostgreSQL to/from JSON conversion lib",
   "main": "index.js",
   "scripts": {
